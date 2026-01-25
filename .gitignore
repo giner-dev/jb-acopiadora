@@ -1,0 +1,81 @@
+# ==================================
+# JB ACOPIADORA
+# ==================================
+
+# Variables de entorno (CRÍTICO - NUNCA SUBIR)
+.env
+.env.local
+.env.*.local
+
+# Composer
+/vendor/
+composer.lock
+composer.phar
+
+# Logs
+/storage/logs/*.log
+/storage/logs/*.txt
+*.log
+
+# Cache
+/storage/cache/*
+!/storage/cache/.gitkeep
+
+# Archivos subidos por usuarios
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.buildpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+nbproject/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Node modules (si usas herramientas de frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Archivos de respaldo de BD
+*.sql
+*.sql.gz
+*.dump
+backups/
+
+# Archivos de PHP
+*.php~
+.phpunit.result.cache
+
+# Archivos generados
+/public/assets/compiled/
+
+# Documentos temporales de desarrollo
+TODO.txt
+NOTAS_DESARROLLO.txt
+
+# Archivos de sistema
+.htaccess.backup
