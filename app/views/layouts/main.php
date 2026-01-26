@@ -5,7 +5,7 @@
     
     <div class="main-content">
         <header class="topbar">
-            <button class="menu-toggle" id="menuToggle">
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
             
@@ -56,10 +56,6 @@
             
             <?php echo $content; ?>
         </main>
-        
-        <footer class="footer">
-            <p>&copy; <?php echo date('Y'); ?> JB Acopiadora. Todos los derechos reservados.</p>
-        </footer>
     </div>
 </div>
 

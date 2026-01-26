@@ -55,14 +55,6 @@ if (isset($_SESSION['usuario_id'])) {
     $_SESSION['LAST_ACTIVITY'] = time();
 }
 
-/** 
- * require_once ROOT_PATH . '/core/Database.php';
- * require_once ROOT_PATH . '/core/Model.php';
- * require_once ROOT_PATH . '/core/View.php';
- * require_once ROOT_PATH . '/core/Controller.php';
- * require_once ROOT_PATH . '/core/Router.php';
-*/
-
 try {
     $db = Database::getInstance();
     

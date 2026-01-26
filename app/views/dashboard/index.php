@@ -5,7 +5,7 @@
 
 <div class="dashboard-grid">
     <div class="stat-card">
-        <div class="stat-icon" style="background-color: #FFD082;">
+        <div class="stat-icon icon-primary">
             <i class="fas fa-users"></i>
         </div>
         <div class="stat-info">
@@ -16,7 +16,7 @@
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background-color: #433F4E;">
+        <div class="stat-icon icon-secondary">
             <i class="fas fa-box"></i>
         </div>
         <div class="stat-info">
@@ -27,7 +27,7 @@
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background-color: #FFD082;">
+        <div class="stat-icon icon-primary">
             <i class="fas fa-file-invoice"></i>
         </div>
         <div class="stat-info">
@@ -38,7 +38,7 @@
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background-color: #433F4E;">
+        <div class="stat-icon icon-secondary">
             <i class="fas fa-money-bill-wave"></i>
         </div>
         <div class="stat-info">
