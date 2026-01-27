@@ -1,0 +1,22 @@
+/* ============================================
+   PRODUCTOS.CSS - ESTILOS ESPECÍFICOS
+   ============================================ */
+
+/* Nota: La mayoría de estilos están en main.css
+   Este archivo solo contiene estilos únicos de productos */
+
+/* Stock badges con nombres específicos del modelo */
+.stock-badge.normal {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.stock-badge.bajo_stock {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.stock-badge.sin_stock {
+    background-color: #f8d7da;
+    color: #721c24;
+}

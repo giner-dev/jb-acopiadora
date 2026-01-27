@@ -1,5 +1,4 @@
 <?php
-
 class View{
     private $viewsPath;
     private $layout = 'main';

@@ -668,10 +668,5 @@ window.addEventListener('unhandledrejection', function(e) {
 // ============================================
 window.addEventListener('load', function() {
     hideLoader();
-    
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.3s ease';
-        document.body.style.opacity = '1';
-    }, 10);
+    // NO HAY ANIMACIÓN - Solo ocultar loader
 });

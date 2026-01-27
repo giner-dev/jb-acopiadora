@@ -62,6 +62,10 @@
 <script>
     window.PHP_BASE_URL = '<?php echo url(); ?>';
 </script>
-<script src="<?php echo asset('js/main.js'); ?>"></script>
+
+<script src="<?php echo asset('js/main.js?v2'); ?>"></script>
+<script src="<?php echo asset('js/dashboard.js'); ?>"></script>
+<script src="<?php echo asset('js/clientes.js'); ?>"></script>
+
 </body>
 </html>
