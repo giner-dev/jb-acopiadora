@@ -29,3 +29,15 @@ $router->post('/productos/actualizar/{id}', 'ProductoController@actualizar');
 $router->get('/productos/ver/{id}', 'ProductoController@ver');
 $router->post('/productos/cambiar-estado/{id}', 'ProductoController@cambiarEstado');
 $router->post('/productos/eliminar/{id}', 'ProductoController@eliminar');
+
+// Ruras de las facturas
+$router->get('/facturas', 'FacturaController@index');
+$router->get('/facturas/crear', 'FacturaController@crear');
+$router->get('/facturas/buscar-clientes', 'FacturaController@buscarClientes');
+$router->get('/facturas/buscar-productos', 'FacturaController@buscarProductos');
+$router->post('/facturas/guardar', 'FacturaController@guardar');
+$router->get('/facturas/ver/{id}', 'FacturaController@ver');
+$router->post('/facturas/anular/{id}', 'FacturaController@anular');
+$router->get('/facturas/imprimir/{id}', 'FacturaController@imprimir');
+$router->get('/facturas/pdf/{id}', 'FacturaController@exportarPdf');
+$router->get('/facturas/excel', 'FacturaController@exportarExcel');

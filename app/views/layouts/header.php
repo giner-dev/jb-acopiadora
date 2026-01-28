@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo asset('css/main.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/dashboard.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/clientes.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/facturas.css'); ?>">
 
 </head>
 <body>

@@ -66,6 +66,7 @@
 <script src="<?php echo asset('js/main.js?v2'); ?>"></script>
 <script src="<?php echo asset('js/dashboard.js'); ?>"></script>
 <script src="<?php echo asset('js/clientes.js'); ?>"></script>
+<script src="<?php echo asset('js/facturas.js'); ?>"></script>
 
 </body>
 </html>
