@@ -167,7 +167,7 @@
                                        target="_blank">
                                         <i class="fas fa-file-pdf"></i>
                                     </a>
-                                    <a href="<?php echo url('facturas/imprimir/' . $factura->id_factura); ?>" 
+                                    <a href="<?php echo url('facturas/pdf/' . $factura->id_factura); ?>" 
                                        class="btn btn-sm btn-secondary" 
                                        title="Imprimir"
                                        target="_blank">

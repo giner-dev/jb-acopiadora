@@ -10,7 +10,7 @@
             <i class="fas fa-file-pdf"></i>
             Descargar PDF
         </a>
-        <a href="<?php echo url('facturas/imprimir/' . $factura->id_factura); ?>" 
+        <a href="<?php echo url('facturas/pdf/' . $factura->id_factura); ?>" 
            class="btn btn-secondary"
            target="_blank">
             <i class="fas fa-print"></i>
