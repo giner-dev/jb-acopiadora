@@ -74,9 +74,9 @@ class ProductoRepository {
     }
 
     public function create($data) {
-        $sql = "INSERT INTO productos (codigo, nombre, categoria_id, unidad_id, precio_venta, stock_actual, stock_minimo, estado) 
-                VALUES (:codigo, :nombre, :categoria_id, :unidad_id, :precio_venta, :stock_actual, :stock_minimo, :estado)";
-        
+        $sql = "INSERT INTO productos (codigo, nombre, categoria_id, unidad_id, precio_venta, stock_actual, stock_minimo, stock_ilimitado, estado) 
+                VALUES (:codigo, :nombre, :categoria_id, :unidad_id, :precio_venta, :stock_actual, :stock_minimo, :stock_ilimitado, :estado)";
+
         return $this->db->insert($sql, $data);
     }
 
@@ -87,7 +87,9 @@ class ProductoRepository {
                     categoria_id = :categoria_id,
                     unidad_id = :unidad_id,
                     precio_venta = :precio_venta,
+                    stock_actual = :stock_actual,
                     stock_minimo = :stock_minimo,
+                    stock_ilimitado = :stock_ilimitado,
                     estado = :estado
                 WHERE id_producto = :id";
         

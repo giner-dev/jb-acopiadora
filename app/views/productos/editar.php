@@ -110,33 +110,56 @@
                         value="<?php echo $producto->precio_venta; ?>"
                         required>
                 </div>
-                
-                <div class="form-group col-md-4">
-                    <label for="stock_actual">
-                        <i class="fas fa-boxes"></i>
-                        Stock Actual
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>
+                        <input 
+                            type="checkbox" 
+                            id="stock_ilimitado" 
+                            name="stock_ilimitado" 
+                            value="1"
+                            <?php echo $producto->stock_ilimitado == 1 ? 'checked' : ''; ?>
+                            onchange="toggleStockFields()">
+                        <strong>Stock Ilimitado</strong>
                     </label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        value="<?php echo number_format($producto->stock_actual, 2); ?> <?php echo e($producto->unidad_codigo ?? ''); ?>"
-                        disabled>
-                    <small>El stock se actualiza desde entradas y salidas de inventario</small>
+                    <small class="d-block">Marque esta opción si el producto no requiere control de inventario</small>
                 </div>
-                
-                <div class="form-group col-md-4">
-                    <label for="stock_minimo">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Stock Mínimo
-                    </label>
-                    <input 
-                        type="number" 
-                        id="stock_minimo" 
-                        name="stock_minimo" 
-                        class="form-control" 
-                        step="0.01"
-                        min="0"
-                        value="<?php echo $producto->stock_minimo; ?>">
+            </div>
+                                    
+            <div id="stock_fields">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="stock_actual">
+                            <i class="fas fa-boxes"></i>
+                            Stock Actual
+                        </label>
+                        <input 
+                            type="number" 
+                            id="stock_actual" 
+                            name="stock_actual" 
+                            class="form-control" 
+                            step="0.01"
+                            min="0"
+                            value="<?php echo $producto->stock_actual; ?>">
+                        <small>Editable solo en productos con stock fijo</small>
+                    </div>
+                                    
+                    <div class="form-group col-md-4">
+                        <label for="stock_minimo">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Stock Mínimo
+                        </label>
+                        <input 
+                            type="number" 
+                            id="stock_minimo" 
+                            name="stock_minimo" 
+                            class="form-control" 
+                            step="0.01"
+                            min="0"
+                            value="<?php echo $producto->stock_minimo; ?>">
+                    </div>
                 </div>
             </div>
             

@@ -97,9 +97,9 @@ class ProductoController extends Controller {
             'unidad_id' => $this->getPost('unidad_id'),
             'precio_venta' => $this->getPost('precio_venta'),
             'stock_actual' => $this->getPost('stock_actual'),
-            'stock_minimo' => $this->getPost('stock_minimo')
+            'stock_minimo' => $this->getPost('stock_minimo'),
+            'stock_ilimitado' => $this->getPost('stock_ilimitado')
         ];
-
         $resultado = $this->productoService->crear($datos);
 
         if ($resultado['success']) {
@@ -151,7 +151,9 @@ class ProductoController extends Controller {
             'categoria_id' => $this->getPost('categoria_id'),
             'unidad_id' => $this->getPost('unidad_id'),
             'precio_venta' => $this->getPost('precio_venta'),
+            'stock_actual' => $this->getPost('stock_actual'),
             'stock_minimo' => $this->getPost('stock_minimo'),
+            'stock_ilimitado' => $this->getPost('stock_ilimitado'),
             'estado' => $this->getPost('estado')
         ];
 

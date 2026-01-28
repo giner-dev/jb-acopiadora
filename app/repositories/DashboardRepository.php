@@ -58,10 +58,12 @@ class DashboardRepository {
                     p.nombre,
                     p.stock_actual,
                     p.stock_minimo,
+                    p.stock_ilimitado,
                     u.nombre as unidad
                 FROM productos p
                 LEFT JOIN unidades_medida u ON p.unidad_id = u.id_unidad
                 WHERE p.estado = 'activo' 
+                AND p.stock_ilimitado = 0
                 AND p.stock_actual <= p.stock_minimo
                 ORDER BY (p.stock_minimo - p.stock_actual) DESC
                 LIMIT 5";

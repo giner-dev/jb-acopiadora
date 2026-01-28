@@ -215,9 +215,13 @@ class FacturaService {
     private function validarStock($detalles) {
         foreach ($detalles as $detalle) {
             $producto = $this->productoRepository->findById($detalle['producto_id']);
-            
+
             if (!$producto) {
                 return ['success' => false, 'errors' => ['Producto no encontrado']];
+            }
+
+            if ($producto->stock_ilimitado == 1) {
+                continue;
             }
 
             if ($producto->stock_actual < $detalle['cantidad']) {
@@ -233,12 +237,22 @@ class FacturaService {
 
     private function descontarStock($productoId, $cantidad) {
         $producto = $this->productoRepository->findById($productoId);
+        
+        if ($producto->stock_ilimitado == 1) {
+            return;
+        }
+
         $nuevoStock = $producto->stock_actual - $cantidad;
         $this->productoRepository->updateStock($productoId, $nuevoStock);
     }
 
     private function devolverStock($productoId, $cantidad) {
         $producto = $this->productoRepository->findById($productoId);
+
+        if ($producto->stock_ilimitado == 1) {
+            return;
+        }
+
         $nuevoStock = $producto->stock_actual + $cantidad;
         $this->productoRepository->updateStock($productoId, $nuevoStock);
     }

@@ -34,6 +34,7 @@ class ProductoService {
             'precio_venta' => $datos['precio_venta'],
             'stock_actual' => $datos['stock_actual'] ?? 0,
             'stock_minimo' => $datos['stock_minimo'] ?? 0,
+            'stock_ilimitado' => isset($datos['stock_ilimitado']) ? 1 : 0,
             'estado' => 'activo'
         ];
 
@@ -68,7 +69,9 @@ class ProductoService {
             'categoria_id' => !empty($datos['categoria_id']) ? $datos['categoria_id'] : null,
             'unidad_id' => !empty($datos['unidad_id']) ? $datos['unidad_id'] : null,
             'precio_venta' => $datos['precio_venta'],
+            'stock_actual' => $datos['stock_actual'] ?? 0,
             'stock_minimo' => $datos['stock_minimo'] ?? 0,
+            'stock_ilimitado' => isset($datos['stock_ilimitado']) ? 1 : 0,
             'estado' => $datos['estado']
         ];
 

@@ -130,7 +130,7 @@ class FacturaController extends Controller {
         header('Content-Type: application/json');
 
         $search = $this->getQuery('search', '');
-        
+
         $filters = [];
         if (!empty($search)) {
             $filters['search'] = $search;
@@ -138,7 +138,7 @@ class FacturaController extends Controller {
         $filters['estado'] = 'activo';
 
         $productos = $this->productoService->obtenerTodos($filters, 1, 20);
-        
+
         $productosArray = [];
         foreach ($productos as $producto) {
             $productosArray[] = [
@@ -147,6 +147,7 @@ class FacturaController extends Controller {
                 'nombre' => $producto->nombre,
                 'precio_venta' => $producto->precio_venta,
                 'stock_actual' => $producto->stock_actual,
+                'stock_ilimitado' => $producto->stock_ilimitado,
                 'unidad_codigo' => $producto->unidad_codigo
             ];
         }

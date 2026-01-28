@@ -24,6 +24,11 @@ function initFormValidation() {
             return false;
         }
         
+        const stockIlimitado = document.getElementById('stock_ilimitado');
+        if (stockIlimitado && stockIlimitado.checked) {
+            return true;
+        }
+        
         const stockActual = document.getElementById('stock_actual');
         if (stockActual && parseFloat(stockActual.value) < 0) {
             e.preventDefault();
@@ -71,3 +76,35 @@ function eliminarProducto(id, nombre) {
         });
     }
 }
+
+function toggleStockFields() {
+    const checkbox = document.getElementById('stock_ilimitado');
+    const stockFields = document.getElementById('stock_fields');
+    const stockActual = document.getElementById('stock_actual');
+    const stockMinimo = document.getElementById('stock_minimo');
+    
+    if (checkbox && checkbox.checked) {
+        stockFields.style.opacity = '0.5';
+        if (stockActual) {
+            stockActual.disabled = true;
+            stockActual.value = '0';
+        }
+        if (stockMinimo) {
+            stockMinimo.disabled = true;
+            stockMinimo.value = '0';
+        }
+    } else {
+        stockFields.style.opacity = '1';
+        if (stockActual) stockActual.disabled = false;
+        if (stockMinimo) stockMinimo.disabled = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initProductosModule();
+    
+    const stockCheckbox = document.getElementById('stock_ilimitado');
+    if (stockCheckbox) {
+        toggleStockFields();
+    }
+});

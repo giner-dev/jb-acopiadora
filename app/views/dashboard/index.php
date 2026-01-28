@@ -73,13 +73,25 @@
                             <?php foreach ($productosBajoStock as $producto): ?>
                             <tr>
                                 <td><strong><?php echo e($producto['nombre']); ?></strong></td>
-                                <td><?php echo number_format($producto['stock_actual'], 2); ?> <?php echo e($producto['unidad'] ?? ''); ?></td>
-                                <td><?php echo number_format($producto['stock_minimo'], 2); ?> <?php echo e($producto['unidad'] ?? ''); ?></td>
+                                <td>
+                                    <?php echo number_format($producto['stock_actual'], 2); ?> 
+                                    <?php echo e($producto['unidad'] ?? ''); ?>
+                                </td>
+                                <td>
+                                    <?php echo number_format($producto['stock_minimo'], 2); ?> 
+                                    <?php echo e($producto['unidad'] ?? ''); ?>
+                                </td>
                                 <td>
                                     <?php if ($producto['stock_actual'] <= 0): ?>
-                                        <span class="badge badge-danger">Sin Stock</span>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle"></i>
+                                            Sin Stock
+                                        </span>
                                     <?php else: ?>
-                                        <span class="badge badge-warning">Bajo</span>
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            Stock Bajo
+                                        </span>
                                     <?php endif; ?>
                                 </td>
                             </tr>

@@ -108,43 +108,51 @@
                 <h2><i class="fas fa-boxes"></i> Inventario</h2>
             </div>
             <div class="card-body">
-                <div class="stock-info">
-                    <div class="stock-item">
-                        <span class="stock-label">Stock Actual:</span>
-                        <span class="stock-value <?php echo $producto->sinStock() ? 'text-danger' : ($producto->tieneBajoStock() ? 'text-warning' : 'text-success'); ?>">
-                            <?php echo number_format($producto->stock_actual, 2); ?> 
-                            <?php echo e($producto->unidad_codigo ?? ''); ?>
-                        </span>
+                <?php if ($producto->stock_ilimitado == 1): ?>
+                    <div class="alert alert-info">
+                        <i class="fas fa-infinity"></i>
+                        <strong>Stock Ilimitado</strong>
+                        <p>Este producto no tiene restricciones de inventario</p>
                     </div>
-                    
-                    <div class="stock-item">
-                        <span class="stock-label">Stock Mínimo:</span>
-                        <span class="stock-value">
-                            <?php echo number_format($producto->stock_minimo, 2); ?> 
-                            <?php echo e($producto->unidad_codigo ?? ''); ?>
-                        </span>
+                <?php else: ?>
+                    <div class="stock-info">
+                        <div class="stock-item">
+                            <span class="stock-label">Stock Actual:</span>
+                            <span class="stock-value <?php echo $producto->sinStock() ? 'text-danger' : ($producto->tieneBajoStock() ? 'text-warning' : 'text-success'); ?>">
+                                <?php echo number_format($producto->stock_actual, 2); ?> 
+                                <?php echo e($producto->unidad_codigo ?? ''); ?>
+                            </span>
+                        </div>
+                        
+                        <div class="stock-item">
+                            <span class="stock-label">Stock Mínimo:</span>
+                            <span class="stock-value">
+                                <?php echo number_format($producto->stock_minimo, 2); ?> 
+                                <?php echo e($producto->unidad_codigo ?? ''); ?>
+                            </span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <?php if ($producto->sinStock()): ?>
+                            <div class="alert alert-danger">
+                                <i class="fas fa-times-circle"></i>
+                                Sin stock disponible
+                            </div>
+                        <?php elseif ($producto->tieneBajoStock()): ?>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Stock bajo. Considere reabastecer
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i>
+                                Stock suficiente
+                            </div>
+                        <?php endif; ?>
                     </div>
-                    
-                    <hr>
-                    
-                    <?php if ($producto->sinStock()): ?>
-                        <div class="alert alert-danger">
-                            <i class="fas fa-times-circle"></i>
-                            Sin stock disponible
-                        </div>
-                    <?php elseif ($producto->tieneBajoStock()): ?>
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Stock bajo. Considere reabastecer
-                        </div>
-                    <?php else: ?>
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle"></i>
-                            Stock suficiente
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
+                <?php endif; ?>
+                        
                 <div class="mt-3">
                     <a href="<?php echo url('movimientos?producto=' . $producto->id_producto); ?>" class="btn btn-primary btn-block">
                         <i class="fas fa-history"></i>

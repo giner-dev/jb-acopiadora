@@ -10,6 +10,7 @@ class Producto {
     public $precio_venta;
     public $stock_actual;
     public $stock_minimo;
+    public $stock_ilimitado;
     public $estado;
     public $fecha_creacion;
     public $fecha_actualizacion;
@@ -53,14 +54,27 @@ class Producto {
     }
     
     public function tieneBajoStock() {
+        if ($this->stock_ilimitado == 1) {
+            return false;
+        }
         return $this->stock_actual <= $this->stock_minimo;
     }
     
     public function sinStock() {
+        if ($this->stock_ilimitado == 1) {
+            return false;
+        }
         return $this->stock_actual <= 0;
+    }
+
+    public function tieneStockIlimitado() {
+        return $this->stock_ilimitado == 1;
     }
     
     public function getStockStatus() {
+        if ($this->stock_ilimitado == 1) {
+            return 'ilimitado';
+        }
         if ($this->sinStock()) {
             return 'sin_stock';
         } elseif ($this->tieneBajoStock()) {

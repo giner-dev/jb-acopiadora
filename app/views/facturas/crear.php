@@ -301,6 +301,7 @@
             <input type="hidden" id="producto_temp_nombre">
             <input type="hidden" id="producto_temp_stock">
             <input type="hidden" id="producto_temp_unidad">
+            <input type="hidden" id="producto_temp_ilimitado">
             
             <div class="form-actions" style="margin-top: 20px;">
                 <button type="button" class="btn btn-success btn-block" onclick="confirmarAgregarProducto()">

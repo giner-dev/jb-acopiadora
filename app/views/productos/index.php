@@ -135,14 +135,20 @@
                             <td><?php echo e($producto->categoria_nombre ?? '-'); ?></td>
                             <td><?php echo formatMoney($producto->precio_venta); ?></td>
                             <td>
-                                <span class="stock-badge <?php echo $producto->getStockStatus(); ?>">
-                                    <?php echo number_format($producto->stock_actual, 2); ?> 
-                                    <?php echo e($producto->unidad_codigo ?? ''); ?>
-                                </span>
-                                <?php if ($producto->tieneBajoStock()): ?>
-                                    <small class="text-muted">
-                                        (Mín: <?php echo number_format($producto->stock_minimo, 2); ?>)
-                                    </small>
+                                <?php if ($producto->stock_ilimitado == 1): ?>
+                                    <span class="stock-badge ilimitado">
+                                        <i class="fas fa-infinity"></i> Ilimitado
+                                    </span>
+                                <?php else: ?>
+                                    <span class="stock-badge <?php echo $producto->getStockStatus(); ?>">
+                                        <?php echo number_format($producto->stock_actual, 2); ?> 
+                                        <?php echo e($producto->unidad_codigo ?? ''); ?>
+                                    </span>
+                                    <?php if ($producto->tieneBajoStock()): ?>
+                                        <small class="text-muted">
+                                            (Mín: <?php echo number_format($producto->stock_minimo, 2); ?>)
+                                        </small>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                             <td>

@@ -99,39 +99,58 @@
                         placeholder="0.00"
                         required>
                 </div>
-                
-                <div class="form-group col-md-4">
-                    <label for="stock_actual">
-                        <i class="fas fa-boxes"></i>
-                        Stock Inicial
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>
+                        <input 
+                            type="checkbox" 
+                            id="stock_ilimitado" 
+                            name="stock_ilimitado" 
+                            value="1"
+                            onchange="toggleStockFields()">
+                        <strong>Stock Ilimitado</strong>
                     </label>
-                    <input 
-                        type="number" 
-                        id="stock_actual" 
-                        name="stock_actual" 
-                        class="form-control" 
-                        step="0.01"
-                        min="0"
-                        value="0"
-                        placeholder="0.00">
-                    <small>Puede actualizar el stock más tarde</small>
+                    <small class="d-block">Marque esta opción si el producto no requiere control de inventario</small>
                 </div>
-                
-                <div class="form-group col-md-4">
-                    <label for="stock_minimo">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Stock Mínimo
-                    </label>
-                    <input 
-                        type="number" 
-                        id="stock_minimo" 
-                        name="stock_minimo" 
-                        class="form-control" 
-                        step="0.01"
-                        min="0"
-                        value="0"
-                        placeholder="0.00">
-                    <small>Alerta cuando el stock baje de este valor</small>
+            </div>
+                                    
+            <div id="stock_fields">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="stock_actual">
+                            <i class="fas fa-boxes"></i>
+                            Stock Inicial
+                        </label>
+                        <input 
+                            type="number" 
+                            id="stock_actual" 
+                            name="stock_actual" 
+                            class="form-control" 
+                            step="0.01"
+                            min="0"
+                            value="0"
+                            placeholder="0.00">
+                        <small>Puede actualizar el stock más tarde</small>
+                    </div>
+                                    
+                    <div class="form-group col-md-6">
+                        <label for="stock_minimo">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Stock Mínimo
+                        </label>
+                        <input 
+                            type="number" 
+                            id="stock_minimo" 
+                            name="stock_minimo" 
+                            class="form-control" 
+                            step="0.01"
+                            min="0"
+                            value="0"
+                            placeholder="0.00">
+                        <small>Alerta cuando el stock baje de este valor</small>
+                    </div>
                 </div>
             </div>
             

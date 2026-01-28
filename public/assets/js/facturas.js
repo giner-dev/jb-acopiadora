@@ -273,7 +273,11 @@ function buscarProductos() {
                     tdNombre.innerHTML = '<strong>' + producto.nombre + '</strong>';
                     
                     const tdStock = document.createElement('td');
-                    tdStock.textContent = parseFloat(producto.stock_actual).toFixed(2) + ' ' + (producto.unidad_codigo || '');
+                    if (producto.stock_ilimitado == 1) {
+                        tdStock.innerHTML = '<span style="color: #0c5460; font-weight: bold;"><i class="fas fa-infinity"></i> Ilimitado</span>';
+                    } else {
+                        tdStock.textContent = parseFloat(producto.stock_actual).toFixed(2) + ' ' + (producto.unidad_codigo || '');
+                    }
                     
                     const tdPrecio = document.createElement('td');
                     tdPrecio.textContent = 'Bs ' + parseFloat(producto.precio_venta).toFixed(2);
@@ -320,8 +324,15 @@ function seleccionarProducto(producto) {
     document.getElementById('producto_temp_stock').value = producto.stock_actual;
     document.getElementById('producto_temp_unidad').value = producto.unidad_codigo || '';
     
+    document.getElementById('producto_temp_ilimitado').value = producto.stock_ilimitado || 0;
+    
     document.getElementById('producto_seleccionado_nombre').textContent = producto.nombre;
-    document.getElementById('producto_seleccionado_stock').textContent = parseFloat(producto.stock_actual).toFixed(2) + ' ' + (producto.unidad_codigo || 'unidades');
+    
+    if (producto.stock_ilimitado == 1) {
+        document.getElementById('producto_seleccionado_stock').innerHTML = '<span style="color: #0c5460; font-weight: bold;"><i class="fas fa-infinity"></i> Stock Ilimitado</span>';
+    } else {
+        document.getElementById('producto_seleccionado_stock').textContent = parseFloat(producto.stock_actual).toFixed(2) + ' ' + (producto.unidad_codigo || 'unidades');
+    }
     
     document.getElementById('modal_cantidad').value = '';
     document.getElementById('modal_precio').value = parseFloat(producto.precio_venta).toFixed(2);
@@ -344,10 +355,12 @@ function confirmarAgregarProducto() {
     const precioUnitario = parseFloat(document.getElementById('modal_precio').value);
     const stock = parseFloat(document.getElementById('producto_temp_stock').value);
     const unidad = document.getElementById('producto_temp_unidad').value;
+    const stockIlimitado = parseInt(document.getElementById('producto_temp_ilimitado').value);
     
     console.log('=== AGREGANDO PRODUCTO ===');
     console.log('ID:', productoId, 'Nombre:', productoNombre);
     console.log('Cantidad:', cantidad, 'Precio:', precioUnitario);
+    console.log('Stock ilimitado:', stockIlimitado);
     
     if (!cantidad || cantidad <= 0 || isNaN(cantidad)) {
         if (typeof showNotification === 'function') {
@@ -369,7 +382,7 @@ function confirmarAgregarProducto() {
         return;
     }
     
-    if (cantidad > stock) {
+    if (stockIlimitado != 1 && cantidad > stock) {
         if (typeof showNotification === 'function') {
             showNotification('Stock insuficiente. Stock disponible: ' + stock.toFixed(2), 'error');
         } else {
@@ -390,10 +403,9 @@ function confirmarAgregarProducto() {
         return;
     }
     
-    // IMPORTANTE: Limpiar y sanitizar todos los strings
     const nombreLimpio = String(productoNombre)
-        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Eliminar caracteres de control
-        .replace(/['"]/g, '') // Eliminar comillas que podrían causar problemas
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+        .replace(/['"]/g, '')
         .trim();
     
     const unidadLimpia = String(unidad || '')

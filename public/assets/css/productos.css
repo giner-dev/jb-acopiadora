@@ -20,3 +20,13 @@
     background-color: #f8d7da;
     color: #721c24;
 }
+
+.stock-badge.ilimitado {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    font-weight: bold;
+}
+
+#stock_fields {
+    transition: opacity 0.3s ease;
+}
