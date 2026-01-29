@@ -68,6 +68,7 @@
 <script src="<?php echo asset('js/clientes.js'); ?>"></script>
 <script src="<?php echo asset('js/productos.js'); ?>"></script>
 <script src="<?php echo asset('js/facturas.js'); ?>"></script>
+<script src="<?php echo asset('js/granos.js'); ?>"></script>
 
 </body>
 </html>

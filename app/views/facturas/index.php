@@ -247,13 +247,13 @@
     </div>
 </div>
 
-<div id="modalAnular" class="modal" style="display: none;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Anular Factura</h3>
-            <button type="button" class="modal-close" onclick="cerrarModalAnular()">&times;</button>
+<div id="modalAnular" class="modal-facturas" style="display: none;">
+    <div class="modal-facturas-content" style="max-width: 500px;">
+        <div class="modal-facturas-header">
+            <h3><i class="fas fa-ban"></i> Anular Factura</h3>
+            <button type="button" class="modal-facturas-close" onclick="cerrarModalAnular()">&times;</button>
         </div>
-        <div class="modal-body">
+        <div class="modal-facturas-body">
             <p>¿Está seguro que desea anular la factura <strong id="facturaCodigoAnular"></strong>?</p>
             <p class="text-danger"><strong>Esta acción devolverá el stock y eliminará el registro de cuenta corriente.</strong></p>
             
@@ -271,9 +271,15 @@
                     required></textarea>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="cerrarModalAnular()">Cancelar</button>
-            <button type="button" class="btn btn-danger" onclick="confirmarAnulacion()">Anular Factura</button>
+        <div class="modal-facturas-footer">
+            <button type="button" class="btn btn-secondary" onclick="cerrarModalAnular()">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button type="button" class="btn btn-danger" onclick="confirmarAnulacion()">
+                <i class="fas fa-ban"></i>
+                Anular Factura
+            </button>
         </div>
     </div>
 </div>

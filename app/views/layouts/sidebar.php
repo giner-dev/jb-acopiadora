@@ -36,6 +36,13 @@
             </li>
             
             <li>
+                <a href="<?php echo url('granos'); ?>" class="nav-link">
+                    <i class="fas fa-wheat-awn"></i>
+                    <span class="nav-text">Granos</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="<?php echo url('acopios'); ?>" class="nav-link">
                     <i class="fas fa-seedling"></i>
                     <span class="nav-text">Acopios</span>

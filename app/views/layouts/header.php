@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?php echo asset('css/clientes.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/productos.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/facturas.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/granos.css'); ?>">
 
 </head>
 <body>

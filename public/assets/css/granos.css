@@ -1,0 +1,125 @@
+/* ============================================
+   GRANOS.CSS - ESTILOS ESPECÍFICOS
+   ============================================ */
+
+/* Precio badge en tabla */
+.precio-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Display de precio actual */
+.precio-actual-display {
+    text-align: center;
+    padding: 20px;
+}
+
+.precio-valor {
+    font-size: 36px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+.precio-unidad {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.precio-vigencia {
+    font-size: 13px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.precio-vigencia i {
+    margin-right: 5px;
+    color: #FFD082;
+}
+
+/* Estadísticas en página de precios */
+.estadistica-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.estadistica-item:last-child {
+    border-bottom: none;
+}
+
+.estadistica-label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.estadistica-label i {
+    margin-right: 8px;
+}
+
+.estadistica-valor {
+    font-size: 18px;
+    font-weight: bold;
+    color: #433F4E;
+}
+
+/* Tabla de histórico de precios */
+.table tbody tr td {
+    vertical-align: middle;
+}
+
+/* Badges de variación */
+.badge {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.badge small {
+    display: block;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+/* Modal específico de granos */
+#modalPrecio .form-group {
+    margin-bottom: 20px;
+}
+
+#modalPrecio .form-group label {
+    font-weight: 600;
+    color: #433F4E;
+    margin-bottom: 8px;
+    display: block;
+}
+
+#modalPrecio .form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .precio-valor {
+        font-size: 28px;
+    }
+    
+    .estadistica-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .estadistica-valor {
+        font-size: 16px;
+    }
+}

@@ -260,11 +260,6 @@ class FacturaController extends Controller {
         $this->requireAuth();
         $this->validateMethod('POST');
 
-        $token = $this->getPost('csrf_token');
-        if (!verifyCsrfToken($token)) {
-            $this->json(['success' => false, 'message' => 'Token inválido'], 400);
-        }
-
         $motivo = $this->getPost('motivo');
 
         $resultado = $this->facturaService->anular($id, $motivo);

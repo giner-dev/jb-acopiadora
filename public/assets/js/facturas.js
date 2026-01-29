@@ -284,7 +284,14 @@ function buscarProductos() {
                     
                     const tdAccion = document.createElement('td');
                     if (yaAgregado) {
-                        tdAccion.innerHTML = '<span class="badge badge-success"><i class="fas fa-check"></i> Agregado</span>';
+                        const btnAgregarOtraVez = document.createElement('button');
+                        btnAgregarOtraVez.type = 'button';
+                        btnAgregarOtraVez.className = 'btn btn-sm btn-warning';
+                        btnAgregarOtraVez.innerHTML = '<i class="fas fa-plus"></i> Agregar otra vez';
+                        btnAgregarOtraVez.onclick = function() {
+                            seleccionarProducto(producto);
+                        };
+                        tdAccion.appendChild(btnAgregarOtraVez);
                     } else {
                         const btnAgregar = document.createElement('button');
                         btnAgregar.type = 'button';
@@ -389,17 +396,6 @@ function confirmarAgregarProducto() {
             alert('Stock insuficiente. Stock disponible: ' + stock.toFixed(2));
         }
         document.getElementById('modal_cantidad').focus();
-        return;
-    }
-    
-    const yaExiste = facturasDetalles.find(d => d.producto_id == productoId);
-    if (yaExiste) {
-        if (typeof showNotification === 'function') {
-            showNotification('El producto ya está en la lista', 'error');
-        } else {
-            alert('El producto ya está en la lista');
-        }
-        cerrarModalCantidad();
         return;
     }
     
@@ -538,14 +534,20 @@ function anularFactura(id, codigo) {
     facturaIdParaAnular = id;
     document.getElementById('facturaCodigoAnular').textContent = codigo;
     document.getElementById('motivoAnulacion').value = '';
-    document.getElementById('modalAnular').style.display = 'flex';
+    
+    const modal = document.getElementById('modalAnular');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 function cerrarModalAnular() {
-    document.getElementById('modalAnular').style.display = 'none';
+    const modal = document.getElementById('modalAnular');
+    if (modal) {
+        modal.style.display = 'none';
+    }
     facturaIdParaAnular = null;
 }
-
 function confirmarAnulacion() {
     const motivo = document.getElementById('motivoAnulacion').value.trim();
     

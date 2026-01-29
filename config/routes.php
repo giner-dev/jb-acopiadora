@@ -41,3 +41,15 @@ $router->post('/facturas/anular/{id}', 'FacturaController@anular');
 $router->get('/facturas/imprimir/{id}', 'FacturaController@imprimir');
 $router->get('/facturas/pdf/{id}', 'FacturaController@exportarPdf');
 $router->get('/facturas/excel', 'FacturaController@exportarExcel');
+
+// Granos
+$router->get('/granos', 'GranoController@index');
+$router->get('/granos/crear', 'GranoController@crear');
+$router->post('/granos/guardar', 'GranoController@guardar');
+$router->get('/granos/editar/{id}', 'GranoController@editar');
+$router->post('/granos/actualizar/{id}', 'GranoController@actualizar');
+$router->get('/granos/ver/{id}', 'GranoController@ver');
+$router->get('/granos/precios/{id}', 'GranoController@precios');
+$router->post('/granos/registrar-precio/{id}', 'GranoController@registrarPrecio');
+$router->post('/granos/cambiar-estado/{id}', 'GranoController@cambiarEstado');
+$router->post('/granos/eliminar/{id}', 'GranoController@eliminar');
