@@ -315,7 +315,7 @@ class FacturaController extends Controller {
         $pdf->setCustomFooter('Generado el ' . date('d/m/Y H:i:s') . ' por ' . authUserFullName());
     
         // Logo en la esquina superior izquierda (ruta corregida)
-        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/jbacopiadora/public/assets/images/logo_jb_acopiadora.png';
+        $logoPath = __DIR__ . '/../../public/assets/images/logo_jb_acopiadora.png';
         if (file_exists($logoPath)) {
             // Convertir a JPEG temporalmente
             $imagen = @imagecreatefrompng($logoPath);
