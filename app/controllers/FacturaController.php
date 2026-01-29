@@ -488,4 +488,89 @@ class FacturaController extends Controller {
         $writer->save('php://output');
         exit;
     }
+
+    public function editar($id) {
+        $this->requireAuth();
+    
+        $factura = $this->facturaService->obtenerPorId($id);
+    
+        if (!$factura) {
+            $this->setError('Factura no encontrada');
+            $this->redirect(url('facturas'));
+            return;
+        }
+    
+        if ($factura->isAnulada()) {
+            $this->setError('No se puede editar una factura anulada');
+            $this->redirect(url('facturas/ver/' . $id));
+            return;
+        }
+    
+        $this->render('facturas/editar', [
+            'title' => 'Editar Factura',
+            'factura' => $factura,
+            'module_css' => 'facturas',
+            'module_js' => 'facturas'
+        ]);
+    }
+    
+    public function actualizar($id) {
+        $this->requireAuth();
+        $this->validateMethod('POST');
+    
+        $token = $this->getPost('csrf_token');
+        if (!verifyCsrfToken($token)) {
+            $this->setError('Token de seguridad inválido');
+            $this->redirect(url('facturas/editar/' . $id));
+            return;
+        }
+    
+        $detallesJson = isset($_POST['detalles_json']) ? $_POST['detalles_json'] : '';
+        $detallesJson = html_entity_decode($detallesJson, ENT_QUOTES, 'UTF-8');
+        
+        if (empty($detallesJson)) {
+            $this->setError('No se recibieron productos. Por favor intente nuevamente.');
+            $this->redirect(url('facturas/editar/' . $id));
+            return;
+        }
+        
+        $detalles = json_decode($detallesJson, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->setError('Error al decodificar los productos: ' . json_last_error_msg());
+            $this->redirect(url('facturas/editar/' . $id));
+            return;
+        }
+    
+        if (empty($detalles) || !is_array($detalles) || count($detalles) === 0) {
+            $this->setError('Debe agregar al menos un producto');
+            $this->redirect(url('facturas/editar/' . $id));
+            return;
+        }
+    
+        $clienteId = $this->getPost('cliente_id');
+        
+        if (empty($clienteId)) {
+            $this->setError('Debe seleccionar un cliente');
+            $this->redirect(url('facturas/editar/' . $id));
+            return;
+        }
+    
+        $datos = [
+            'cliente_id' => $clienteId,
+            'fecha' => $this->getPost('fecha'),
+            'adelanto' => $this->getPost('adelanto', 0),
+            'detalles' => $detalles
+        ];
+    
+        $resultado = $this->facturaService->editar($id, $datos);
+    
+        if ($resultado['success']) {
+            $this->setSuccess('Factura editada correctamente: ' . $resultado['codigo']);
+            $this->redirect(url('facturas/ver/' . $resultado['id']));
+        } else {
+            $this->setError(implode(', ', $resultado['errors']));
+            $this->redirect(url('facturas/editar/' . $id));
+        }
+    }
 }

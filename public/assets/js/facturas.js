@@ -574,7 +574,6 @@ function confirmarAnulacion() {
     }
     
     const formData = new FormData();
-    formData.append('csrf_token', document.querySelector('meta[name="csrf-token"]')?.content || '');
     formData.append('motivo', motivo);
     
     fetch(window.PHP_BASE_URL + '/facturas/anular/' + facturaIdParaAnular, {

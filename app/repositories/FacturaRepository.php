@@ -192,4 +192,34 @@ class FacturaRepository {
         $ultimo = $result['ultimo'] ?? 0;
         return $ultimo + 1;
     }
+
+    public function update($id, $data) {
+        $sql = "UPDATE facturas 
+                SET cliente_id = :cliente_id,
+                    fecha = :fecha,
+                    subtotal = :subtotal,
+                    total = :total,
+                    adelanto = :adelanto,
+                    saldo = :saldo,
+                    estado = :estado
+                WHERE id_factura = :id";
+
+        $params = [
+            'id' => $id,
+            'cliente_id' => $data['cliente_id'],
+            'fecha' => $data['fecha'],
+            'subtotal' => $data['subtotal'],
+            'total' => $data['total'],
+            'adelanto' => $data['adelanto'],
+            'saldo' => $data['saldo'],
+            'estado' => $data['estado']
+        ];
+
+        return $this->db->execute($sql, $params);
+    }
+
+    public function deleteDetalles($facturaId) {
+        $sql = "DELETE FROM facturas_detalle WHERE factura_id = :factura_id";
+        return $this->db->execute($sql, ['factura_id' => $facturaId]);
+    }
 }

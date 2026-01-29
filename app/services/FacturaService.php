@@ -342,4 +342,171 @@ class FacturaService {
         
         $this->db->execute($sql, $params);
     }
+
+    public function editar($id, $datos) {
+        $this->db->beginTransaction();
+    
+        try {
+            $facturaOriginal = $this->facturaRepository->findById($id);
+    
+            if (!$facturaOriginal) {
+                $this->db->rollBack();
+                return ['success' => false, 'errors' => ['Factura no encontrada']];
+            }
+    
+            if ($facturaOriginal->isAnulada()) {
+                $this->db->rollBack();
+                return ['success' => false, 'errors' => ['No se puede editar una factura anulada']];
+            }
+    
+            $errores = $this->validarDatos($datos);
+            if (!empty($errores)) {
+                $this->db->rollBack();
+                return ['success' => false, 'errors' => $errores];
+            }
+    
+            $validacionStock = $this->validarStock($datos['detalles']);
+            if (!$validacionStock['success']) {
+                $this->db->rollBack();
+                return $validacionStock;
+            }
+    
+            // PASO 1: Devolver stock de productos anteriores
+            foreach ($facturaOriginal->detalles as $detalleAnterior) {
+                $this->devolverStock($detalleAnterior['producto_id'], $detalleAnterior['cantidad']);
+                
+                $producto = $this->productoRepository->findById($detalleAnterior['producto_id']);
+                
+                $sql = "INSERT INTO movimiento_inventario 
+                        (producto_id, tipo, cantidad, saldo_anterior, saldo_actual, referencia_tipo, referencia_id, observaciones, usuario_id) 
+                        VALUES (:producto_id, 'AJUSTE_EDICION', :cantidad, :saldo_anterior, :saldo_actual, 'factura', :referencia_id, 'Devolución por edición de factura', :usuario_id)";
+                
+                $params = [
+                    'producto_id' => $detalleAnterior['producto_id'],
+                    'cantidad' => $detalleAnterior['cantidad'],
+                    'saldo_anterior' => $producto->stock_actual - $detalleAnterior['cantidad'],
+                    'saldo_actual' => $producto->stock_actual,
+                    'referencia_id' => $id,
+                    'usuario_id' => authUserId()
+                ];
+                
+                $this->db->execute($sql, $params);
+            }
+    
+            // PASO 2: Calcular nuevos totales
+            $subtotal = 0;
+            foreach ($datos['detalles'] as $detalle) {
+                $subtotal += $detalle['cantidad'] * $detalle['precio_unitario'];
+            }
+    
+            $total = $subtotal;
+            $adelanto = isset($datos['adelanto']) ? floatval($datos['adelanto']) : $facturaOriginal->adelanto;
+            $saldo = $total - $adelanto;
+    
+            $estado = 'PENDIENTE';
+            if ($adelanto >= $total) {
+                $estado = 'PAGADA';
+                $saldo = 0;
+            } elseif ($adelanto > 0) {
+                $estado = 'PAGO_PARCIAL';
+            }
+    
+            // PASO 3: Actualizar factura
+            $datosFactura = [
+                'cliente_id' => $datos['cliente_id'],
+                'fecha' => $datos['fecha'],
+                'subtotal' => $subtotal,
+                'total' => $total,
+                'adelanto' => $adelanto,
+                'saldo' => $saldo,
+                'estado' => $estado
+            ];
+    
+            $this->facturaRepository->update($id, $datosFactura);
+    
+            // PASO 4: Eliminar detalles anteriores
+            $this->facturaRepository->deleteDetalles($id);
+    
+            // PASO 5: Insertar nuevos detalles y descontar stock
+            foreach ($datos['detalles'] as $detalle) {
+                $datosDetalle = [
+                    'factura_id' => $id,
+                    'producto_id' => $detalle['producto_id'],
+                    'cantidad' => $detalle['cantidad'],
+                    'precio_unitario' => $detalle['precio_unitario'],
+                    'subtotal' => $detalle['cantidad'] * $detalle['precio_unitario']
+                ];
+    
+                $this->facturaRepository->createDetalle($datosDetalle);
+                $this->descontarStock($detalle['producto_id'], $detalle['cantidad']);
+                
+                $producto = $this->productoRepository->findById($detalle['producto_id']);
+                
+                $sql = "INSERT INTO movimiento_inventario 
+                        (producto_id, tipo, cantidad, saldo_anterior, saldo_actual, referencia_tipo, referencia_id, observaciones, usuario_id) 
+                        VALUES (:producto_id, 'SALIDA_VENTA', :cantidad, :saldo_anterior, :saldo_actual, 'factura', :referencia_id, 'Venta por edición de factura', :usuario_id)";
+                
+                $params = [
+                    'producto_id' => $detalle['producto_id'],
+                    'cantidad' => $detalle['cantidad'],
+                    'saldo_anterior' => $producto->stock_actual + $detalle['cantidad'],
+                    'saldo_actual' => $producto->stock_actual,
+                    'referencia_id' => $id,
+                    'usuario_id' => authUserId()
+                ];
+                
+                $this->db->execute($sql, $params);
+            }
+    
+            // PASO 6: Actualizar cuenta corriente
+            $this->actualizarCuentaCorriente($id, $datos['cliente_id'], $total, $adelanto, $facturaOriginal);
+    
+            $this->db->commit();
+    
+            logMessage("Factura editada: {$facturaOriginal->codigo} - Cliente ID: {$datos['cliente_id']}", 'info');
+    
+            return ['success' => true, 'id' => $id, 'codigo' => $facturaOriginal->codigo];
+    
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            logMessage("Error al editar factura: " . $e->getMessage(), 'error');
+            return ['success' => false, 'errors' => ['Error al procesar la edición: ' . $e->getMessage()]];
+        }
+    }
+    
+    private function actualizarCuentaCorriente($facturaId, $clienteId, $nuevoTotal, $nuevoAdelanto, $facturaOriginal) {
+        // Eliminar registros anteriores de cuenta corriente
+        $sql = "DELETE FROM cuenta_corriente WHERE referencia_tipo = 'factura' AND referencia_id = :factura_id";
+        $this->db->execute($sql, ['factura_id' => $facturaId]);
+    
+        // Registrar nuevo DEBE (total de la factura)
+        $sql = "INSERT INTO cuenta_corriente 
+                (cliente_id, fecha, tipo_movimiento, referencia_tipo, referencia_id, descripcion, debe, haber, usuario_id) 
+                VALUES (:cliente_id, NOW(), 'FACTURA', 'factura', :referencia_id, 'Factura de venta (editada)', :debe, 0, :usuario_id)";
+        
+        $params = [
+            'cliente_id' => $clienteId,
+            'referencia_id' => $facturaId,
+            'debe' => $nuevoTotal,
+            'usuario_id' => authUserId()
+        ];
+        
+        $this->db->execute($sql, $params);
+    
+        // Registrar nuevo HABER si hay adelanto
+        if ($nuevoAdelanto > 0) {
+            $sql = "INSERT INTO cuenta_corriente 
+                    (cliente_id, fecha, tipo_movimiento, referencia_tipo, referencia_id, descripcion, debe, haber, usuario_id) 
+                    VALUES (:cliente_id, NOW(), 'PAGO_CLIENTE', 'factura', :referencia_id, 'Adelanto en factura (editada)', 0, :haber, :usuario_id)";
+            
+            $params = [
+                'cliente_id' => $clienteId,
+                'referencia_id' => $facturaId,
+                'haber' => $nuevoAdelanto,
+                'usuario_id' => authUserId()
+            ];
+            
+            $this->db->execute($sql, $params);
+        }
+    }
 }

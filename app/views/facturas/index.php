@@ -161,6 +161,13 @@
                                        title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                    <?php if (!$factura->isAnulada()): ?>
+                                    <a href="<?php echo url('facturas/editar/' . $factura->id_factura); ?>" 
+                                       class="btn btn-sm btn-warning" 
+                                       title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <?php endif; ?>
                                     <a href="<?php echo url('facturas/pdf/' . $factura->id_factura); ?>" 
                                        class="btn btn-sm btn-danger" 
                                        title="Descargar PDF"

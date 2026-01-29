@@ -67,12 +67,6 @@ class GranoController extends Controller {
         $this->requireAuth();
         $this->validateMethod('POST');
 
-        $token = $this->getPost('csrf_token');
-        if (!verifyCsrfToken($token)) {
-            $this->setError('Token de seguridad inválido');
-            $this->redirect(url('granos/crear'));
-        }
-
         $datos = [
             'nombre' => $this->getPost('nombre'),
             'unidad_id' => $this->getPost('unidad_id'),
@@ -115,12 +109,6 @@ class GranoController extends Controller {
     public function actualizar($id) {
         $this->requireAuth();
         $this->validateMethod('POST');
-
-        $token = $this->getPost('csrf_token');
-        if (!verifyCsrfToken($token)) {
-            $this->setError('Token de seguridad inválido');
-            $this->redirect(url('granos/editar/' . $id));
-        }
 
         $datos = [
             'nombre' => $this->getPost('nombre'),
@@ -188,11 +176,6 @@ class GranoController extends Controller {
         $this->requireAuth();
         $this->validateMethod('POST');
 
-        $token = $this->getPost('csrf_token');
-        if (!verifyCsrfToken($token)) {
-            $this->json(['success' => false, 'message' => 'Token inválido'], 400);
-        }
-
         $precio = $this->getPost('precio');
         $fecha = $this->getPost('fecha');
 
@@ -204,11 +187,6 @@ class GranoController extends Controller {
     public function cambiarEstado($id) {
         $this->requireAuth();
         $this->validateMethod('POST');
-
-        $token = $this->getPost('csrf_token');
-        if (!verifyCsrfToken($token)) {
-            $this->json(['success' => false, 'message' => 'Token inválido'], 400);
-        }
 
         $nuevoEstado = $this->getPost('estado');
 

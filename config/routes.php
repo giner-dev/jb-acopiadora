@@ -41,6 +41,8 @@ $router->post('/facturas/anular/{id}', 'FacturaController@anular');
 $router->get('/facturas/imprimir/{id}', 'FacturaController@imprimir');
 $router->get('/facturas/pdf/{id}', 'FacturaController@exportarPdf');
 $router->get('/facturas/excel', 'FacturaController@exportarExcel');
+$router->get('/facturas/editar/{id}', 'FacturaController@editar');
+$router->post('/facturas/actualizar/{id}', 'FacturaController@actualizar');
 
 // Granos
 $router->get('/granos', 'GranoController@index');

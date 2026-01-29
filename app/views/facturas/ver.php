@@ -10,6 +10,13 @@
             <i class="fas fa-file-pdf"></i>
             Descargar PDF
         </a>
+        <?php if (!$factura->isAnulada()): ?>
+        <a href="<?php echo url('facturas/editar/' . $factura->id_factura); ?>" 
+           class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+            Editar
+        </a>
+        <?php endif; ?>
         <a href="<?php echo url('facturas/pdf/' . $factura->id_factura); ?>" 
            class="btn btn-secondary"
            target="_blank">
