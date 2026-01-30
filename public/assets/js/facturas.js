@@ -252,7 +252,7 @@ function actualizarPaginacionClientes(totalPages) {
     
     paginacionHTML += '<span class="page-info">Página ' + clientesPage + ' de ' + totalPages + '</span>';
     
-    paginacionHTML += '<button type="button" onclick="buscarProductos(' + (clientesPage + 1) + ')" ' + 
+    paginacionHTML += '<button type="button" onclick="buscarClientes(' + (clientesPage + 1) + ')" ' + 
                       (clientesPage >= totalPages ? 'disabled' : '') + '>' +
                       'Siguiente <i class="fas fa-chevron-right"></i></button>';
     
