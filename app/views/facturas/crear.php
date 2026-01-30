@@ -86,7 +86,7 @@
                 <div class="card-header">
                     <h2><i class="fas fa-box"></i> Productos</h2>
                 </div>
-                <div class="card-body">
+                <div class="card-body facturas">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <button type="button" class="btn btn-primary btn-block" onclick="abrirModalProductos()">

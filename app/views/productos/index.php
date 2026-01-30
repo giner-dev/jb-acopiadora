@@ -114,7 +114,7 @@
                 </a>
             </div>
         <?php else: ?>
-            <div class="table-responsive">
+            <div class="table-responsive productos">
                 <table class="table">
                     <thead>
                         <tr>

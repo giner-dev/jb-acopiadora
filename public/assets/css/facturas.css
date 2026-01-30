@@ -266,12 +266,163 @@
 }
 
 @media (max-width: 480px) {
+    .facturas .mb-3{
+        align-content: center;
+        width: 100%;
+    }
+
+    .btn-lg{
+        margin-top: 10px;
+    }
+
+    .btn-block{
+        margin-top: 10px;
+    }
+
     .modal-facturas-header h3 {
         font-size: 16px;
     }
+
+
+    /* TABLAS RESPONDIVE */
+
+    /* Forzamos a que aparezcan las columnas que main.css ocultó */
+    .facturas .table th:nth-child(3),
+    .facturas .table td:nth-child(3),
+    .facturas .table th:nth-child(5),
+    .facturas .table td:nth-child(5),
+    .facturas .table th:nth-child(6),
+    .facturas .table td:nth-child(6){
+        display: table-cell !important; 
+    }
+
+
+    /* Ocultamos las que realmente queremos ocultar en PRODUCTOS */
+    .facturas .table th:nth-child(2),
+    .facturas .table td:nth-child(2),
+    .facturas .table th:nth-child(7),
+    .facturas .table td:nth-child(7){
+        display: none !important; 
+    }
+}
+
+
+/* Estilos para paginación en modales */
+.modal-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.modal-pagination button {
+    padding: 8px 16px;
+    border: 2px solid #d1d5db;
+    background-color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+}
+
+.modal-pagination button:hover:not(:disabled) {
+    background-color: #FFD082;
+    border-color: #FFD082;
+    color: #433F4E;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-pagination button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.modal-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+}
+
+.modal-pagination .page-info {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    margin: 0 8px;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Contenedor principal del footer del modal */
+.modal-footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+/* Botón de acción ocupa 20% en desktop */
+.modal-action-btn {
+    flex-shrink: 0;
+}
+
+.modal-action-btn .btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* Responsive: Mobile */
+@media (max-width: 768px) {
+    .modal-footer-container {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 16px;
+    }
     
-    .modal-table th:nth-child(3),
-    .modal-table td:nth-child(3) {
-        display: none;
+    /* Paginación ocupa 100% en móvil */
+    .modal-pagination {
+        width: 100%;
+        flex: none;
+    }
+    
+    /* Botón ocupa 70% centrado en móvil */
+    .modal-action-btn {
+        width: 70%;
+    }
+    
+    .modal-action-btn .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* Responsive para paginación de modales */
+@media (max-width: 480px) {
+    .modal-pagination {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+    
+    .modal-pagination button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    
+    .modal-pagination .page-info {
+        font-size: 13px;
+        min-width: 80px;
     }
 }

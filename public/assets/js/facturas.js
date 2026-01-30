@@ -6,6 +6,12 @@
 let facturasDetalles = [];
 let facturaIdParaAnular = null;
 
+// Variables globales para paginación de modales
+let clientesPage = 1;
+let clientesTotalPages = 1;
+let productosPage = 1;
+let productosTotalPages = 1;
+
 // Inicialización solo si estamos en la página de facturas
 document.addEventListener('DOMContentLoaded', function() {
     const formFactura = document.getElementById('formFactura');
@@ -165,6 +171,7 @@ function validarCodigoFactura() {
 }
 
 function abrirModalClientes() {
+    clientesPage = 1;
     document.getElementById('modalClientes').style.display = 'flex';
     document.getElementById('searchCliente').focus();
     buscarClientes();
@@ -174,9 +181,10 @@ function cerrarModalClientes() {
     document.getElementById('modalClientes').style.display = 'none';
 }
 
-function buscarClientes() {
+function buscarClientes(page = 1) {
+    clientesPage = page;
     const search = document.getElementById('searchCliente').value;
-    const url = window.PHP_BASE_URL + '/facturas/buscar-clientes?search=' + encodeURIComponent(search);
+    const url = window.PHP_BASE_URL + '/facturas/buscar-clientes?search=' + encodeURIComponent(search) + '&page=' + page;
     
     fetch(url)
         .then(response => response.json())
@@ -214,8 +222,12 @@ function buscarClientes() {
                     tr.appendChild(tdAccion);
                     tbody.appendChild(tr);
                 });
+                
+                // Actualizar controles de paginación
+                actualizarPaginacionClientes(data.totalPages || 1);
             } else {
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center">No se encontraron clientes</td></tr>';
+                actualizarPaginacionClientes(1);
             }
         })
         .catch(error => {
@@ -224,6 +236,44 @@ function buscarClientes() {
                 showNotification('Error al buscar clientes', 'error');
             }
         });
+}
+
+function actualizarPaginacionClientes(totalPages) {
+    clientesTotalPages = totalPages;
+    
+    let paginacionHTML = '<div class="modal-footer-container">';
+    
+    // Contenedor de paginación (80% en desktop)
+    paginacionHTML += '<div class="modal-pagination">';
+    
+    paginacionHTML += '<button type="button" onclick="buscarClientes(' + (clientesPage - 1) + ')" ' + 
+                      (clientesPage <= 1 ? 'disabled' : '') + '>' +
+                      '<i class="fas fa-chevron-left"></i> Anterior</button>';
+    
+    paginacionHTML += '<span class="page-info">Página ' + clientesPage + ' de ' + totalPages + '</span>';
+    
+    paginacionHTML += '<button type="button" onclick="buscarProductos(' + (clientesPage + 1) + ')" ' + 
+                      (clientesPage >= totalPages ? 'disabled' : '') + '>' +
+                      'Siguiente <i class="fas fa-chevron-right"></i></button>';
+    
+    paginacionHTML += '</div>';
+    
+    // Botón de agregar (20% en desktop)
+    paginacionHTML += '<div class="modal-action-btn">';
+    paginacionHTML += '<a href="' + window.PHP_BASE_URL + '/clientes/crear" class="btn btn-success">';
+    paginacionHTML += '<i class="fas fa-plus"></i> Nuevo Cliente';
+    paginacionHTML += '</a>';
+    paginacionHTML += '</div>';
+    
+    paginacionHTML += '</div>';
+    
+    let footerContainer = document.querySelector('#modalClientes .modal-footer-container');
+    if (footerContainer) {
+        footerContainer.outerHTML = paginacionHTML;
+    } else {
+        const modalBody = document.querySelector('#modalClientes .modal-facturas-body');
+        modalBody.insertAdjacentHTML('afterend', paginacionHTML);
+    }
 }
 
 function seleccionarCliente(id, nombre, ci) {
@@ -241,6 +291,7 @@ function limpiarCliente() {
 }
 
 function abrirModalProductos() {
+    productosPage = 1;
     document.getElementById('modalProductos').style.display = 'flex';
     document.getElementById('searchProducto').focus();
     buscarProductos();
@@ -250,9 +301,10 @@ function cerrarModalProductos() {
     document.getElementById('modalProductos').style.display = 'none';
 }
 
-function buscarProductos() {
+function buscarProductos(page = 1) {
+    productosPage = page;
     const search = document.getElementById('searchProducto').value;
-    const url = window.PHP_BASE_URL + '/facturas/buscar-productos?search=' + encodeURIComponent(search);
+    const url = window.PHP_BASE_URL + '/facturas/buscar-productos?search=' + encodeURIComponent(search) + '&page=' + page;
     
     fetch(url)
         .then(response => response.json())
@@ -310,8 +362,12 @@ function buscarProductos() {
                     tr.appendChild(tdAccion);
                     tbody.appendChild(tr);
                 });
+                
+                // Actualizar controles de paginación
+                actualizarPaginacionProductos(data.totalPages || 1);
             } else {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center">No se encontraron productos</td></tr>';
+                actualizarPaginacionProductos(1);
             }
         })
         .catch(error => {
@@ -320,6 +376,44 @@ function buscarProductos() {
                 showNotification('Error al buscar productos', 'error');
             }
         });
+}
+
+function actualizarPaginacionProductos(totalPages) {
+    productosTotalPages = totalPages;
+    
+    let paginacionHTML = '<div class="modal-footer-container">';
+    
+    // Contenedor de paginación (80% en desktop)
+    paginacionHTML += '<div class="modal-pagination">';
+    
+    paginacionHTML += '<button type="button" onclick="buscarProductos(' + (productosPage - 1) + ')" ' + 
+                      (productosPage <= 1 ? 'disabled' : '') + '>' +
+                      '<i class="fas fa-chevron-left"></i> Anterior</button>';
+    
+    paginacionHTML += '<span class="page-info">Página ' + productosPage + ' de ' + totalPages + '</span>';
+    
+    paginacionHTML += '<button type="button" onclick="buscarProductos(' + (productosPage + 1) + ')" ' + 
+                      (productosPage >= totalPages ? 'disabled' : '') + '>' +
+                      'Siguiente <i class="fas fa-chevron-right"></i></button>';
+    
+    paginacionHTML += '</div>';
+    
+    // Botón de agregar (20% en desktop)
+    paginacionHTML += '<div class="modal-action-btn">';
+    paginacionHTML += '<a href="' + window.PHP_BASE_URL + '/productos/crear" class="btn btn-success">';
+    paginacionHTML += '<i class="fas fa-plus"></i> Nuevo Producto';
+    paginacionHTML += '</a>';
+    paginacionHTML += '</div>';
+    
+    paginacionHTML += '</div>';
+    
+    let footerContainer = document.querySelector('#modalProductos .modal-footer-container');
+    if (footerContainer) {
+        footerContainer.outerHTML = paginacionHTML;
+    } else {
+        const modalBody = document.querySelector('#modalProductos .modal-facturas-body');
+        modalBody.insertAdjacentHTML('afterend', paginacionHTML);
+    }
 }
 
 function seleccionarProducto(producto) {

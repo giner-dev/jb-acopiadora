@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?php echo asset('css/productos.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/facturas.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/granos.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/acopios.css'); ?>">
 
 </head>
 <body>

@@ -101,15 +101,19 @@ class FacturaController extends Controller {
         header('Content-Type: application/json');
 
         $search = $this->getQuery('search', '');
-        
+        $page = (int)$this->getQuery('page', 1);
+        $perPage = 10;
+
         $filters = [];
         if (!empty($search)) {
             $filters['search'] = $search;
         }
         $filters['estado'] = 'activo';
 
-        $clientes = $this->clienteService->obtenerTodos($filters, 1, 20);
-        
+        $clientes = $this->clienteService->obtenerTodos($filters, $page, $perPage);
+        $totalClientes = $this->clienteService->contarTotal($filters);
+        $totalPages = ceil($totalClientes / $perPage);
+
         $clientesArray = [];
         foreach ($clientes as $cliente) {
             $clientesArray[] = [
@@ -121,7 +125,12 @@ class FacturaController extends Controller {
             ];
         }
 
-        echo json_encode(['clientes' => $clientesArray]);
+        echo json_encode([
+            'clientes' => $clientesArray,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'total' => $totalClientes
+        ]);
         exit;
     }
 
@@ -130,6 +139,8 @@ class FacturaController extends Controller {
         header('Content-Type: application/json');
 
         $search = $this->getQuery('search', '');
+        $page = (int)$this->getQuery('page', 1);
+        $perPage = 10;
 
         $filters = [];
         if (!empty($search)) {
@@ -137,7 +148,9 @@ class FacturaController extends Controller {
         }
         $filters['estado'] = 'activo';
 
-        $productos = $this->productoService->obtenerTodos($filters, 1, 20);
+        $productos = $this->productoService->obtenerTodos($filters, $page, $perPage);
+        $totalProductos = $this->productoService->contarTotal($filters);
+        $totalPages = ceil($totalProductos / $perPage);
 
         $productosArray = [];
         foreach ($productos as $producto) {
@@ -152,7 +165,12 @@ class FacturaController extends Controller {
             ];
         }
 
-        echo json_encode(['productos' => $productosArray]);
+        echo json_encode([
+            'productos' => $productosArray,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'total' => $totalProductos
+        ]);
         exit;
     }
 

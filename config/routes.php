@@ -55,3 +55,18 @@ $router->get('/granos/precios/{id}', 'GranoController@precios');
 $router->post('/granos/registrar-precio/{id}', 'GranoController@registrarPrecio');
 $router->post('/granos/cambiar-estado/{id}', 'GranoController@cambiarEstado');
 $router->post('/granos/eliminar/{id}', 'GranoController@eliminar');
+
+// Acopios
+$router->get('/acopios', 'AcopioController@index');
+$router->get('/acopios/crear', 'AcopioController@crear');
+$router->get('/acopios/buscar-clientes', 'AcopioController@buscarClientes');
+$router->get('/acopios/buscar-granos', 'AcopioController@buscarGranos');
+$router->post('/acopios/actualizar-precio-grano', 'AcopioController@actualizarPrecioGrano');
+$router->post('/acopios/guardar', 'AcopioController@guardar');
+$router->get('/acopios/ver/{id}', 'AcopioController@ver');
+$router->post('/acopios/anular/{id}', 'AcopioController@anular');
+$router->get('/acopios/imprimir/{id}', 'AcopioController@imprimir');
+$router->get('/acopios/pdf/{id}', 'AcopioController@exportarPdf');
+$router->get('/acopios/excel', 'AcopioController@exportarExcel');
+$router->get('/acopios/editar/{id}', 'AcopioController@editar');
+$router->post('/acopios/actualizar/{id}', 'AcopioController@actualizar');
