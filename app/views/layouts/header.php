@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="<?php echo asset('css/facturas.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/granos.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('css/acopios.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/cuenta-corriente.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/pagos.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset('css/reportes.css'); ?>">
 
 </head>
 <body>

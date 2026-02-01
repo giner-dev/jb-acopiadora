@@ -21,6 +21,10 @@
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
     --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
     --shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
+
+    /* Repotes */
+    --success-dark: #558b2f;
+    --success-light: #8bc34a;
 }
 
 /* ===================================

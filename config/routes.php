@@ -70,3 +70,32 @@ $router->get('/acopios/pdf/{id}', 'AcopioController@exportarPdf');
 $router->get('/acopios/excel', 'AcopioController@exportarExcel');
 $router->get('/acopios/editar/{id}', 'AcopioController@editar');
 $router->post('/acopios/actualizar/{id}', 'AcopioController@actualizar');
+
+// Cuenta Corriente
+$router->get('/cuenta-corriente', 'CuentaCorrienteController@index');
+$router->get('/cuenta-corriente/clientes', 'CuentaCorrienteController@clientes');
+$router->get('/cuenta-corriente/ver-cliente/{id}', 'CuentaCorrienteController@verCliente');
+$router->get('/cuenta-corriente/pdf/{id}', 'CuentaCorrienteController@exportarPdfCliente');
+$router->get('/cuenta-corriente/excel', 'CuentaCorrienteController@exportarExcel');
+
+// Pagos
+$router->get('/pagos', 'PagoController@index');
+$router->get('/pagos/crear', 'PagoController@crear');
+$router->post('/pagos/guardar', 'PagoController@guardar');
+$router->get('/pagos/ver/{id}', 'PagoController@ver');
+$router->get('/pagos/anular/{id}', 'PagoController@anular');
+$router->get('/pagos/recibo/{id}', 'PagoController@recibo');
+$router->get('/pagos/saldo-cliente', 'PagoController@saldoCliente');
+$router->get('/pagos/buscar-clientes', 'PagoController@buscarClientes');
+
+// Reportes
+$router->get('/reportes', 'ReporteController@index');
+$router->get('/reportes/clientes-deudores', 'ReporteController@clientesDeudores');
+$router->get('/reportes/clientes-acreedores', 'ReporteController@clientesAcreedores');
+$router->get('/reportes/ventas-por-periodo', 'ReporteController@ventasPorPeriodo');
+$router->get('/reportes/acopios-por-periodo', 'ReporteController@acopiosPorPeriodo');
+$router->get('/reportes/productos-mas-vendidos', 'ReporteController@productosMasVendidos');
+$router->get('/reportes/granos-mas-acopiados', 'ReporteController@granosMasAcopiados');
+$router->get('/reportes/rentabilidad-por-cliente', 'ReporteController@rentabilidadPorCliente');
+$router->get('/reportes/estado-inventario', 'ReporteController@estadoInventario');
+$router->get('/reportes/movimientos-inventario', 'ReporteController@movimientosInventario');

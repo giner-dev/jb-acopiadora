@@ -1,0 +1,420 @@
+/* ============================================
+   REPORTES.CSS - ESTILOS AISLADOS
+   ============================================ */
+
+/* MENU PRINCIPAL DE REPORTES */
+.rpt-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.rpt-menu-seccion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rpt-menu-seccion-titulo {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--secondary-color);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.rpt-menu-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: all var(--transition-speed) ease;
+    border-left: 4px solid transparent;
+}
+
+.rpt-menu-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.rpt-menu-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.rpt-menu-card-info h3 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    color: var(--secondary-color);
+}
+
+.rpt-menu-card-info p {
+    margin: 0;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* Colores por categoría de card */
+.rpt-card-deudor {
+    border-left-color: var(--danger);
+}
+.rpt-card-deudor .rpt-menu-card-icon {
+    background-color: #fde8e8;
+    color: var(--danger);
+}
+
+.rpt-card-acreedor {
+    border-left-color: var(--success);
+}
+.rpt-card-acreedor .rpt-menu-card-icon {
+    background-color: #e8f5e9;
+    color: var(--success);
+}
+
+.rpt-card-rentabilidad {
+    border-left-color: var(--info);
+}
+.rpt-card-rentabilidad .rpt-menu-card-icon {
+    background-color: #e3f2fd;
+    color: var(--info);
+}
+
+.rpt-card-ventas {
+    border-left-color: var(--danger);
+}
+.rpt-card-ventas .rpt-menu-card-icon {
+    background-color: #fde8e8;
+    color: var(--danger);
+}
+
+.rpt-card-acopios {
+    border-left-color: var(--success);
+}
+.rpt-card-acopios .rpt-menu-card-icon {
+    background-color: #e8f5e9;
+    color: var(--success);
+}
+
+.rpt-card-productos {
+    border-left-color: var(--primary-color);
+}
+.rpt-card-productos .rpt-menu-card-icon {
+    background-color: #fff8e1;
+    color: var(--secondary-color);
+}
+
+.rpt-card-granos {
+    border-left-color: #8bc34a;
+}
+.rpt-card-granos .rpt-menu-card-icon {
+    background-color: #f1f8e9;
+    color: #558b2f;
+}
+
+.rpt-card-inventario {
+    border-left-color: var(--warning);
+}
+.rpt-card-inventario .rpt-menu-card-icon {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.rpt-card-movimientos {
+    border-left-color: var(--info);
+}
+.rpt-card-movimientos .rpt-menu-card-icon {
+    background-color: #e3f2fd;
+    color: var(--info);
+}
+
+/* STATS GRID */
+.rpt-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.rpt-stat-card {
+    background: var(--bg-white);
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rpt-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.rpt-icon-total {
+    background-color: #e8eaed;
+    color: var(--secondary-color);
+}
+
+.rpt-icon-promedio {
+    background-color: #e3f2fd;
+    color: var(--info);
+}
+
+.rpt-icon-max {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.rpt-icon-valor {
+    background-color: #fff8e1;
+    color: var(--secondary-color);
+}
+
+.rpt-icon-balance {
+    background-color: #e8eaed;
+    color: var(--secondary-color);
+}
+
+.rpt-stat-monto-debe .rpt-stat-icon {
+    background-color: #fde8e8;
+    color: var(--danger);
+}
+
+.rpt-stat-monto-haber .rpt-stat-icon {
+    background-color: #e8f5e9;
+    color: var(--success);
+}
+
+.rpt-stat-sinstock .rpt-stat-icon {
+    background-color: #fde8e8;
+    color: var(--danger);
+}
+
+.rpt-stat-bajo .rpt-stat-icon {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.rpt-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.rpt-stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rpt-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-top: 2px;
+}
+
+/* VALORES */
+.rpt-valor-debe {
+    color: var(--danger) !important;
+    font-weight: 600;
+}
+
+.rpt-valor-haber {
+    color: var(--success) !important;
+    font-weight: 600;
+}
+
+.rpt-valor-sinstock {
+    color: var(--danger) !important;
+    font-weight: 700;
+}
+
+.rpt-valor-bajo {
+    color: var(--warning) !important;
+    font-weight: 700;
+}
+
+/* FILTROS */
+.rpt-filtros-form {
+    margin-bottom: 0;
+}
+
+.rpt-filtros-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.rpt-filtro-grupo {
+    flex: 1;
+    min-width: 140px;
+}
+
+.rpt-filtro-grupo label {
+    display: block;
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+
+.rpt-filtro-acciones {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+}
+
+/* BOTONES DE PERÍODO RÁPIDO */
+.rpt-btn-periodo {
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
+/* GRÁFICO DE BARRAS (CSS puro, sin librería externa) */
+.rpt-grafico-container {
+    padding: 20px 0;
+}
+
+.rpt-grafico-barras {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    height: 200px;
+    padding: 0 10px;
+    border-bottom: 2px solid var(--border-color);
+    border-left: 2px solid var(--border-color);
+}
+
+.rpt-barra-grupo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.rpt-barra-valor {
+    font-size: 11px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.rpt-barra {
+    width: 100%;
+    max-width: 60px;
+    background-color: var(--danger);
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease;
+    min-height: 4px;
+}
+
+.rpt-barra-haber {
+    background-color: var(--success);
+}
+
+.rpt-barra-etiqueta {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 6px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* RANKING BADGES */
+.rpt-badge-ranking {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.rpt-ranking-1 { background-color: #f39c12; }
+.rpt-ranking-2 { background-color: #95a5a6; }
+.rpt-ranking-3 { background-color: #d35400; }
+
+/* BARRA DE PROGRESO EN TABLA */
+.rpt-barra-progreso {
+    margin-top: 5px;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.rpt-barra-progreso-fill {
+    height: 100%;
+    background-color: var(--danger);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.rpt-barra-progreso-haber {
+    background-color: var(--success);
+}
+
+/* FILAS ESPECIALES EN INVENTARIO */
+.rpt-fila-sinstock {
+    background-color: #fff5f5;
+}
+
+.rpt-fila-bajo {
+    background-color: #fffbf0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .rpt-menu-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .rpt-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rpt-filtros-row {
+        flex-direction: column;
+    }
+
+    .rpt-filtro-grupo {
+        min-width: 100%;
+    }
+
+    .rpt-grafico-barras {
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rpt-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

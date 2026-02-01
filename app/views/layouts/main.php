@@ -70,6 +70,9 @@
 <script src="<?php echo asset('js/facturas.js'); ?>"></script>
 <script src="<?php echo asset('js/granos.js'); ?>"></script>
 <script src="<?php echo asset('js/acopios.js'); ?>"></script>
+<script src="<?php echo asset('js/cuenta-corriente.js'); ?>"></script>
+<script src="<?php echo asset('js/pagos.js'); ?>"></script>
+<script src="<?php echo asset('js/reportes.js'); ?>"></script>
 
 </body>
 </html>
