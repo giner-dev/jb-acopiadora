@@ -185,14 +185,8 @@ class FacturaController extends Controller {
             return;
         }
 
-        // IMPORTANTE: Obtener el JSON directamente de $_POST sin sanitización
         $detallesJson = isset($_POST['detalles_json']) ? $_POST['detalles_json'] : '';
-        
-        // Decodificar HTML entities si fueron codificadas
         $detallesJson = html_entity_decode($detallesJson, ENT_QUOTES, 'UTF-8');
-        
-        logMessage("DEBUG - JSON después de html_entity_decode: " . $detallesJson, 'info');
-        logMessage("DEBUG - Longitud JSON: " . strlen($detallesJson), 'info');
         
         if (empty($detallesJson)) {
             logMessage("ERROR: detalles_json está vacío", 'error');
@@ -201,17 +195,10 @@ class FacturaController extends Controller {
             return;
         }
         
-        // Intentar decodificar
         $detalles = json_decode($detallesJson, true);
-        $jsonError = json_last_error();
         
-        logMessage("DEBUG - Código de error JSON: " . $jsonError, 'info');
-        logMessage("DEBUG - Mensaje de error JSON: " . json_last_error_msg(), 'info');
-        logMessage("DEBUG - Array decodificado: " . print_r($detalles, true), 'info');
-        
-        if ($jsonError !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             logMessage("ERROR JSON: " . json_last_error_msg(), 'error');
-            logMessage("ERROR JSON - Detalles completos: " . $detallesJson, 'error');
             $this->setError('Error al decodificar los productos: ' . json_last_error_msg());
             $this->redirect(url('facturas/crear'));
             return;
@@ -225,7 +212,6 @@ class FacturaController extends Controller {
         }
 
         $clienteId = $this->getPost('cliente_id');
-        logMessage("DEBUG - Cliente ID: " . $clienteId, 'info');
         
         if (empty($clienteId)) {
             logMessage("ERROR: Cliente ID vacío", 'error');
@@ -238,11 +224,10 @@ class FacturaController extends Controller {
             'codigo_manual' => $this->getPost('codigo_manual'),
             'cliente_id' => $clienteId,
             'fecha' => $this->getPost('fecha'),
-            'adelanto' => $this->getPost('adelanto', 0),
+            'adelanto_inicial' => $this->getPost('adelanto_inicial', 0),
+            'adelanto_descripcion' => $this->getPost('adelanto_descripcion', ''),
             'detalles' => $detalles
         ];
-
-        logMessage("DEBUG - Datos completos para crear: " . print_r($datos, true), 'info');
 
         $resultado = $this->facturaService->crear($datos);
 
@@ -255,20 +240,68 @@ class FacturaController extends Controller {
         }
     }
 
+    public function agregarAdelanto($id) {
+        $this->requireAuth();
+        $this->validateMethod('POST');
+
+
+        $datos = [
+            'monto' => $this->getPost('monto'),
+            'fecha' => $this->getPost('fecha'),
+            'descripcion' => $this->getPost('descripcion')
+        ];
+
+        $resultado = $this->facturaService->agregarAdelanto($id, $datos);
+
+        $this->json($resultado);
+    }
+
+    public function editarAdelanto($adelantoId) {
+        $this->requireAuth();
+        $this->validateMethod('POST');
+
+        $datos = [
+            'monto' => $this->getPost('monto'),
+            'fecha' => $this->getPost('fecha'),
+            'descripcion' => $this->getPost('descripcion')
+        ];
+
+        $resultado = $this->facturaService->editarAdelanto($adelantoId, $datos);
+
+        $this->json($resultado);
+    }
+
+    public function eliminarAdelanto($adelantoId) {
+        $this->requireAuth();
+        $this->validateMethod('POST');
+
+        $resultado = $this->facturaService->eliminarAdelanto($adelantoId);
+
+        $this->json($resultado);
+    }
+
     public function ver($id) {
         $this->requireAuth();
-
-        $factura = $this->facturaService->obtenerPorId($id);
-
+    
+        $pageAdelantos = (int)$this->getQuery('page_adelantos', 1);
+        $perPageAdelantos = 10;
+    
+        $factura = $this->facturaService->obtenerPorId($id, $pageAdelantos, $perPageAdelantos);
+    
         if (!$factura) {
             $this->setError('Factura no encontrada');
             $this->redirect(url('facturas'));
             return;
         }
-
+    
+        $totalPagesAdelantos = ceil($factura->total_adelantos / $perPageAdelantos);
+    
         $this->render('facturas/ver', [
             'title' => 'Detalle de Factura',
             'factura' => $factura,
+            'pageAdelantos' => $pageAdelantos,
+            'totalPagesAdelantos' => $totalPagesAdelantos,
+            'perPageAdelantos' => $perPageAdelantos,
             'module_css' => 'facturas',
             'module_js' => 'facturas'
         ]);
@@ -510,7 +543,10 @@ class FacturaController extends Controller {
     public function editar($id) {
         $this->requireAuth();
     
-        $factura = $this->facturaService->obtenerPorId($id);
+        $pageAdelantos = (int)$this->getQuery('page_adelantos', 1);
+        $perPageAdelantos = 10;
+    
+        $factura = $this->facturaService->obtenerPorId($id, $pageAdelantos, $perPageAdelantos);
     
         if (!$factura) {
             $this->setError('Factura no encontrada');
@@ -524,9 +560,14 @@ class FacturaController extends Controller {
             return;
         }
     
+        $totalPagesAdelantos = ceil($factura->total_adelantos / $perPageAdelantos);
+    
         $this->render('facturas/editar', [
             'title' => 'Editar Factura',
             'factura' => $factura,
+            'pageAdelantos' => $pageAdelantos,
+            'totalPagesAdelantos' => $totalPagesAdelantos,
+            'perPageAdelantos' => $perPageAdelantos,
             'module_css' => 'facturas',
             'module_js' => 'facturas'
         ]);
@@ -577,7 +618,6 @@ class FacturaController extends Controller {
         $datos = [
             'cliente_id' => $clienteId,
             'fecha' => $this->getPost('fecha'),
-            'adelanto' => $this->getPost('adelanto', 0),
             'detalles' => $detalles
         ];
     

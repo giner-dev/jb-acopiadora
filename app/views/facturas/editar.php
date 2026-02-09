@@ -117,6 +117,118 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- ADELANTOS-->
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fas fa-hand-holding-usd"></i> 
+                        Adelantos Registrados
+                    </h2>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="abrirModalAgregarAdelanto()">
+                        <i class="fas fa-plus"></i>
+                        Agregar Adelanto
+                    </button>
+                </div>
+                <div class="card-body">
+                    <?php if (empty($factura->adelantos)): ?>
+                        <div class="empty-state-small">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <p>No hay adelantos registrados</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="table-responsive adelantos">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Descripción</th>
+                                        <th>Registrado por</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $num = 1; ?>
+                                    <?php foreach ($factura->adelantos as $adelanto): ?>
+                                    <tr>
+                                        <td><?php echo $num++; ?></td>
+                                        <td><?php echo formatDate($adelanto->fecha); ?></td>
+                                        <td><strong class="text-warning"><?php echo formatMoney($adelanto->monto); ?></strong></td>
+                                        <td><?php echo e($adelanto->descripcion ?: '-'); ?></td>
+                                        <td><?php echo e($adelanto->usuario_nombre ?? 'N/A'); ?></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-warning" 
+                                                        onclick="editarAdelanto(<?php echo $adelanto->id_factura_adelanto; ?>, <?php echo $adelanto->monto; ?>, '<?php echo $adelanto->fecha; ?>', '<?php echo addslashes($adelanto->descripcion); ?>')"
+                                                        title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-danger" 
+                                                        onclick="eliminarAdelanto(<?php echo $adelanto->id_factura_adelanto; ?>)"
+                                                        title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            <strong>TOTAL ADELANTOS: </strong>
+                                            <strong class="text-warning"><?php echo formatMoney($factura->adelanto); ?></strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        
+                        <?php if ($totalPagesAdelantos > 1): ?>
+                        <div class="pagination-wrapper" style="margin-top: 15px;">
+                            <div class="pagination-info">
+                                Mostrando <?php echo (($pageAdelantos - 1) * $perPageAdelantos) + 1; ?> - 
+                                <?php echo min($pageAdelantos * $perPageAdelantos, $factura->total_adelantos); ?> 
+                                de <?php echo $factura->total_adelantos; ?> adelantos
+                            </div>
+                                                
+                            <div class="pagination">
+                                <?php if ($pageAdelantos > 1): ?>
+                                    <a href="<?php echo url('facturas/editar/' . $factura->id_factura . '?page_adelantos=' . ($pageAdelantos - 1)); ?>" 
+                                       class="pagination-link">
+                                        <i class="fas fa-chevron-left"></i>
+                                        Anterior
+                                    </a>
+                                <?php endif; ?>
+                                
+                                <?php
+                                $startPage = max(1, $pageAdelantos - 2);
+                                $endPage = min($totalPagesAdelantos, $pageAdelantos + 2);
+                                
+                                for ($i = $startPage; $i <= $endPage; $i++): ?>
+                                    <a href="<?php echo url('facturas/editar/' . $factura->id_factura . '?page_adelantos=' . $i); ?>" 
+                                       class="pagination-link <?php echo $i === $pageAdelantos ? 'active' : ''; ?>">
+                                        <?php echo $i; ?>
+                                    </a>
+                                <?php endfor; ?>
+                                
+                                <?php if ($pageAdelantos < $totalPagesAdelantos): ?>
+                                    <a href="<?php echo url('facturas/editar/' . $factura->id_factura . '?page_adelantos=' . ($pageAdelantos + 1)); ?>" 
+                                       class="pagination-link">
+                                        Siguiente
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
         
         <div class="col-md-4">
@@ -126,38 +238,38 @@
                 </div>
                 <div class="card-body">
                     <div class="resumen-item">
-                        <span class="resumen-label">Subtotal:</span>
+                        <span class="resumen-label">Subtotal Productos:</span>
                         <span class="resumen-value" id="subtotalDisplay">Bs 0.00</span>
                     </div>
                     
                     <div class="resumen-item resumen-total">
-                        <span class="resumen-label">TOTAL:</span>
+                        <span class="resumen-label">TOTAL PRODUCTOS:</span>
                         <span class="resumen-value" id="totalDisplay">Bs 0.00</span>
                     </div>
                     
                     <hr>
                     
-                    <div class="form-group">
-                        <label for="adelanto">
-                            <i class="fas fa-money-bill-wave"></i>
-                            Adelanto / Pago Parcial
-                        </label>
-                        <input 
-                            type="number" 
-                            id="adelanto" 
-                            name="adelanto" 
-                            class="form-control" 
-                            step="0.01"
-                            min="0"
-                            value="<?php echo $factura->adelanto; ?>"
-                            placeholder="0.00">
-                        <small>Si el adelanto es igual o mayor al total, la factura se marcará como PAGADA</small>
+                    <div class="resumen-item">
+                        <span class="resumen-label">Adelantos Actuales:</span>
+                        <span class="resumen-value text-warning"><?php echo formatMoney($factura->adelanto); ?></span>
                     </div>
                     
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Los adelantos se editan desde la vista de detalle
+                    </small>
+                    
+                    <hr>
+                    
                     <div class="resumen-item">
-                        <span class="resumen-label">Saldo Pendiente:</span>
-                        <span class="resumen-value text-danger" id="saldoDisplay">Bs 0.00</span>
+                        <span class="resumen-label">DEUDA TOTAL:</span>
+                        <span class="resumen-value text-danger" id="saldoDisplay">Bs <?php echo number_format($factura->saldo, 2); ?></span>
                     </div>
+                    
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Se recalculará al guardar cambios
+                    </small>
                     
                     <hr>
                     
@@ -176,7 +288,6 @@
     </div>
 </form>
 
-<!-- MODALES (IGUALES A crear.php) -->
 <!-- MODAL BUSCAR CLIENTES -->
 <div id="modalClientes" class="modal-facturas">
     <div class="modal-facturas-content">
@@ -337,5 +448,145 @@ window.addEventListener('DOMContentLoaded', function() {
     actualizarTotalesFactura();
 });
 </script>
+
+<!-- MODAL AGREGAR ADELANTO -->
+<div id="modalAgregarAdelanto" class="modal-facturas" style="display: none;">
+    <div class="modal-facturas-content" style="max-width: 500px;">
+        <div class="modal-facturas-header">
+            <h3><i class="fas fa-plus"></i> Agregar Adelanto</h3>
+            <button type="button" class="modal-facturas-close" onclick="cerrarModalAgregarAdelanto()">&times;</button>
+        </div>
+        <div class="modal-facturas-body">
+            <form id="formAgregarAdelanto">
+                <input type="hidden" name="csrf_token" value="<?php echo csrfToken(); ?>">
+                
+                <div class="form-group">
+                    <label for="adelanto_monto">
+                        <i class="fas fa-dollar-sign"></i>
+                        Monto (Bs)
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="adelanto_monto" 
+                        name="monto" 
+                        class="form-control" 
+                        step="0.01"
+                        min="0.01"
+                        placeholder="Ej: 500.00"
+                        required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adelanto_fecha">
+                        <i class="fas fa-calendar"></i>
+                        Fecha
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        id="adelanto_fecha" 
+                        name="fecha" 
+                        class="form-control" 
+                        value="<?php echo date('Y-m-d'); ?>"
+                        required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adelanto_descripcion_modal">
+                        <i class="fas fa-comment"></i>
+                        Descripción
+                    </label>
+                    <textarea 
+                        id="adelanto_descripcion_modal" 
+                        name="descripcion" 
+                        class="form-control" 
+                        rows="3"
+                        placeholder="Ej: Adelanto para acopio de quinua"></textarea>
+                </div>
+                
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success btn-block">
+                        <i class="fas fa-save"></i>
+                        Guardar Adelanto
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="cerrarModalAgregarAdelanto()">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR ADELANTO -->
+<div id="modalEditarAdelanto" class="modal-facturas" style="display: none;">
+    <div class="modal-facturas-content" style="max-width: 500px;">
+        <div class="modal-facturas-header">
+            <h3><i class="fas fa-edit"></i> Editar Adelanto</h3>
+            <button type="button" class="modal-facturas-close" onclick="cerrarModalEditarAdelanto()">&times;</button>
+        </div>
+        <div class="modal-facturas-body">
+            <form id="formEditarAdelanto">
+                <input type="hidden" name="csrf_token" value="<?php echo csrfToken(); ?>">
+                <input type="hidden" id="editar_adelanto_id">
+                
+                <div class="form-group">
+                    <label for="editar_adelanto_monto">
+                        <i class="fas fa-dollar-sign"></i>
+                        Monto (Bs)
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="editar_adelanto_monto" 
+                        name="monto" 
+                        class="form-control" 
+                        step="0.01"
+                        min="0.01"
+                        required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar_adelanto_fecha">
+                        <i class="fas fa-calendar"></i>
+                        Fecha
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        id="editar_adelanto_fecha" 
+                        name="fecha" 
+                        class="form-control" 
+                        required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar_adelanto_descripcion">
+                        <i class="fas fa-comment"></i>
+                        Descripción
+                    </label>
+                    <textarea 
+                        id="editar_adelanto_descripcion" 
+                        name="descripcion" 
+                        class="form-control" 
+                        rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success btn-block">
+                        <i class="fas fa-save"></i>
+                        Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="cerrarModalEditarAdelanto()">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php endif; ?>

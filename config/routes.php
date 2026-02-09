@@ -43,6 +43,10 @@ $router->get('/facturas/pdf/{id}', 'FacturaController@exportarPdf');
 $router->get('/facturas/excel', 'FacturaController@exportarExcel');
 $router->get('/facturas/editar/{id}', 'FacturaController@editar');
 $router->post('/facturas/actualizar/{id}', 'FacturaController@actualizar');
+// Adelantos de facturas
+$router->post('/facturas/{id}/agregar-adelanto', 'FacturaController@agregarAdelanto');
+$router->post('/facturas/adelanto/editar/{id}', 'FacturaController@editarAdelanto');
+$router->post('/facturas/adelanto/eliminar/{id}', 'FacturaController@eliminarAdelanto');
 
 // Granos
 $router->get('/granos', 'GranoController@index');

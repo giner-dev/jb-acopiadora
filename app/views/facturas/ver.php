@@ -160,6 +160,102 @@
                 </div>
             </div>
         </div>
+
+        <!-- HISTORIAL DE ADELANTOS (SOLO LECTURA) -->
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <i class="fas fa-hand-holding-usd"></i> 
+                    Historial de Adelantos
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Para agregar, editar o eliminar adelantos, utiliza el botón "Editar" en la parte superior.
+                </div>
+
+                <?php if (empty($factura->adelantos)): ?>
+                    <div class="empty-state-small">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>No hay adelantos registrados</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive adelantos">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Descripción</th>
+                                    <th>Registrado por</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $num = (($pageAdelantos - 1) * $perPageAdelantos) + 1; ?>
+                                <?php foreach ($factura->adelantos as $adelanto): ?>
+                                <tr>
+                                    <td><?php echo $num++; ?></td>
+                                    <td><?php echo formatDate($adelanto->fecha); ?></td>
+                                    <td><strong class="text-warning"><?php echo formatMoney($adelanto->monto); ?></strong></td>
+                                    <td><?php echo e($adelanto->descripcion ?: '-'); ?></td>
+                                    <td><?php echo e($adelanto->usuario_nombre ?? 'N/A'); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <strong>TOTAL ADELANTOS: </strong>
+                                        <strong class="text-warning"><?php echo formatMoney($factura->adelanto); ?></strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                                
+                    <?php if ($totalPagesAdelantos > 1): ?>
+                    <div class="pagination-wrapper" style="margin-top: 15px;">
+                        <div class="pagination-info">
+                            Mostrando <?php echo (($pageAdelantos - 1) * $perPageAdelantos) + 1; ?> - 
+                            <?php echo min($pageAdelantos * $perPageAdelantos, $factura->total_adelantos); ?> 
+                            de <?php echo $factura->total_adelantos; ?> adelantos
+                        </div>
+
+                        <div class="pagination">
+                            <?php if ($pageAdelantos > 1): ?>
+                                <a href="<?php echo url('facturas/ver/' . $factura->id_factura . '?page_adelantos=' . ($pageAdelantos - 1)); ?>" 
+                                   class="pagination-link">
+                                    <i class="fas fa-chevron-left"></i>
+                                    Anterior
+                                </a>
+                            <?php endif; ?>
+                            
+                            <?php
+                            $startPage = max(1, $pageAdelantos - 2);
+                            $endPage = min($totalPagesAdelantos, $pageAdelantos + 2);
+                            
+                            for ($i = $startPage; $i <= $endPage; $i++): ?>
+                                <a href="<?php echo url('facturas/ver/' . $factura->id_factura . '?page_adelantos=' . $i); ?>" 
+                                   class="pagination-link <?php echo $i === $pageAdelantos ? 'active' : ''; ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            <?php endfor; ?>
+                            
+                            <?php if ($pageAdelantos < $totalPagesAdelantos): ?>
+                                <a href="<?php echo url('facturas/ver/' . $factura->id_factura . '?page_adelantos=' . ($pageAdelantos + 1)); ?>" 
+                                   class="pagination-link">
+                                    Siguiente
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
     
     <div class="col-md-4">
@@ -170,38 +266,28 @@
             <div class="card-body">
                 <div class="resumen-factura">
                     <div class="resumen-item">
-                        <span class="resumen-label">Subtotal:</span>
-                        <span class="resumen-value"><?php echo formatMoney($factura->subtotal); ?></span>
+                        <span class="resumen-label">Total Productos:</span>
+                        <span class="resumen-value"><?php echo formatMoney($factura->total); ?></span>
                     </div>
                     
-                    <div class="resumen-item resumen-total">
-                        <span class="resumen-label">TOTAL:</span>
-                        <span class="resumen-value"><?php echo formatMoney($factura->total); ?></span>
+                    <div class="resumen-item">
+                        <span class="resumen-label">Total Adelantos:</span>
+                        <span class="resumen-value text-warning"><?php echo formatMoney($factura->adelanto); ?></span>
                     </div>
                     
                     <hr>
                     
-                    <div class="resumen-item">
-                        <span class="resumen-label">Adelanto:</span>
-                        <span class="resumen-value"><?php echo formatMoney($factura->adelanto); ?></span>
-                    </div>
-                    
-                    <div class="resumen-item">
-                        <span class="resumen-label">Saldo Pendiente:</span>
-                        <span class="resumen-value <?php echo $factura->saldo > 0 ? 'text-danger' : 'text-success'; ?>">
+                    <div class="resumen-item resumen-total">
+                        <span class="resumen-label">DEUDA TOTAL:</span>
+                        <span class="resumen-value text-danger">
                             <strong><?php echo formatMoney($factura->saldo); ?></strong>
                         </span>
                     </div>
                     
-                    <?php if ($factura->tieneSaldoPendiente()): ?>
-                    <div class="progress mt-3">
-                        <div class="progress-bar" 
-                             role="progressbar" 
-                             style="width: <?php echo $factura->getPorcentajePagado(); ?>%">
-                            <?php echo number_format($factura->getPorcentajePagado(), 1); ?>% Pagado
-                        </div>
-                    </div>
-                    <?php endif; ?>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Deuda Total = Productos + Adelantos
+                    </small>
                 </div>
                 
                 <?php if (!$factura->isAnulada()): ?>

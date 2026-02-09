@@ -127,46 +127,76 @@
                 </div>
                 <div class="card-body">
                     <div class="resumen-item">
-                        <span class="resumen-label">Subtotal:</span>
+                        <span class="resumen-label">Subtotal Productos:</span>
                         <span class="resumen-value" id="subtotalDisplay">Bs 0.00</span>
                     </div>
-                    
+
                     <div class="resumen-item resumen-total">
-                        <span class="resumen-label">TOTAL:</span>
+                        <span class="resumen-label">TOTAL PRODUCTOS:</span>
                         <span class="resumen-value" id="totalDisplay">Bs 0.00</span>
                     </div>
-                    
+
                     <hr>
-                    
+
+                    <!-- SECCIÓN DE ADELANTO -->
                     <div class="form-group">
-                        <label for="adelanto">
-                            <i class="fas fa-money-bill-wave"></i>
-                            Adelanto / Pago Parcial
+                        <label for="adelanto_inicial">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            Adelanto Inicial (Opcional)
                         </label>
                         <input 
                             type="number" 
-                            id="adelanto" 
-                            name="adelanto" 
+                            id="adelanto_inicial" 
+                            name="adelanto_inicial" 
                             class="form-control" 
                             step="0.01"
                             min="0"
                             value="0"
                             placeholder="0.00">
-                        <small>Si el adelanto es igual o mayor al total, la factura se marcará como PAGADA</small>
+                        <small class="text-info">
+                            <i class="fas fa-info-circle"></i>
+                            Adelanto que JB paga al cliente por sus acopios futuros
+                        </small>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label for="adelanto_descripcion">
+                            <i class="fas fa-comment"></i>
+                            Descripción del Adelanto
+                        </label>
+                        <textarea 
+                            id="adelanto_descripcion" 
+                            name="adelanto_descripcion" 
+                            class="form-control" 
+                            rows="2"
+                            placeholder="Ej: Adelanto por acopio de quinua"></textarea>
+                    </div>
+
+                    <hr>
+
+                    <!-- el saldo SUMA el adelanto -->
                     <div class="resumen-item">
-                        <span class="resumen-label">Saldo Pendiente:</span>
+                        <span class="resumen-label">Adelanto:</span>
+                        <span class="resumen-value text-warning" id="adelantoDisplay">Bs 0.00</span>
+                    </div>
+
+                    <div class="resumen-item">
+                        <span class="resumen-label">DEUDA TOTAL:</span>
                         <span class="resumen-value text-danger" id="saldoDisplay">Bs 0.00</span>
                     </div>
-                    
+
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Deuda Total = Total Productos + Adelantos
+                    </small>
+
                     <hr>
-                    
+
                     <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnGuardar">
                         <i class="fas fa-save"></i>
                         Guardar Factura
                     </button>
-                    
+
                     <a href="<?php echo url('facturas'); ?>" class="btn btn-secondary btn-block">
                         <i class="fas fa-times"></i>
                         Cancelar

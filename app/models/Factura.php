@@ -24,6 +24,8 @@ class Factura {
     public $usuario_nombre;
     
     public $detalles = [];
+    public $adelantos = [];
+    public $total_adelantos = 0;
     
     public function __construct($data = []) {
         if (!empty($data)) {

@@ -605,23 +605,258 @@ function calcularSaldoFactura() {
     const subtotalText = document.getElementById('totalDisplay').textContent;
     const total = parseFloat(subtotalText.replace('Bs ', '').replace(',', ''));
     
-    const adelantoInput = document.getElementById('adelanto');
+    const adelantoInput = document.getElementById('adelanto_inicial');
     const adelanto = adelantoInput ? parseFloat(adelantoInput.value) || 0 : 0;
     
-    const saldo = total - adelanto;
+    // Ahora se SUMA el adelanto
+    const saldo = total + adelanto;
+    
+    const adelantoDisplay = document.getElementById('adelantoDisplay');
+    if (adelantoDisplay) {
+        adelantoDisplay.textContent = 'Bs ' + adelanto.toFixed(2);
+    }
     
     const saldoDisplay = document.getElementById('saldoDisplay');
     if (saldoDisplay) {
         saldoDisplay.textContent = 'Bs ' + saldo.toFixed(2);
         
-        if (saldo <= 0) {
-            saldoDisplay.classList.remove('text-danger');
-            saldoDisplay.classList.add('text-success');
-        } else {
-            saldoDisplay.classList.remove('text-success');
-            saldoDisplay.classList.add('text-danger');
-        }
+        // Siempre en rojo porque es deuda
+        saldoDisplay.classList.remove('text-success');
+        saldoDisplay.classList.add('text-danger');
     }
+}
+
+// Inicializar listener para adelanto inicial
+document.addEventListener('DOMContentLoaded', function() {
+    const adelantoInput = document.getElementById('adelanto_inicial');
+    if (adelantoInput) {
+        adelantoInput.addEventListener('input', calcularSaldoFactura);
+    }
+});
+
+
+function abrirModalAgregarAdelanto() {
+    document.getElementById('modalAgregarAdelanto').style.display = 'flex';
+    document.getElementById('adelanto_monto').value = '';
+    document.getElementById('adelanto_fecha').value = new Date().toISOString().split('T')[0];
+    document.getElementById('adelanto_descripcion_modal').value = '';
+    document.getElementById('adelanto_monto').focus();
+}
+
+function cerrarModalAgregarAdelanto() {
+    document.getElementById('modalAgregarAdelanto').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const formAgregarAdelanto = document.getElementById('formAgregarAdelanto');
+    
+    if (formAgregarAdelanto) {
+        formAgregarAdelanto.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const monto = parseFloat(document.getElementById('adelanto_monto').value);
+            
+            if (!monto || monto <= 0) {
+                if (typeof showNotification === 'function') {
+                    showNotification('El monto debe ser mayor a 0', 'error');
+                } else {
+                    alert('El monto debe ser mayor a 0');
+                }
+                return;
+            }
+            
+            if (typeof showLoader === 'function') {
+                showLoader();
+            }
+            
+            const formData = new FormData(formAgregarAdelanto);
+            
+            // Obtener el ID de la factura desde la URL
+            const pathParts = window.location.pathname.split('/');
+            const facturaId = pathParts[pathParts.length - 1];
+            
+            fetch(window.PHP_BASE_URL + '/facturas/' + facturaId + '/agregar-adelanto', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (typeof hideLoader === 'function') {
+                    hideLoader();
+                }
+                
+                if (data.success) {
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'success');
+                    } else {
+                        alert(data.message);
+                    }
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'error');
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                if (typeof hideLoader === 'function') {
+                    hideLoader();
+                }
+                console.error('Error:', error);
+                if (typeof showNotification === 'function') {
+                    showNotification('Error al procesar la solicitud', 'error');
+                } else {
+                    alert('Error al procesar la solicitud');
+                }
+            });
+        });
+    }
+});
+
+// ============================================
+// MODAL EDITAR ADELANTO
+// ============================================
+
+function editarAdelanto(id, monto, fecha, descripcion) {
+    document.getElementById('editar_adelanto_id').value = id;
+    document.getElementById('editar_adelanto_monto').value = monto;
+    document.getElementById('editar_adelanto_fecha').value = fecha;
+    document.getElementById('editar_adelanto_descripcion').value = descripcion || '';
+    
+    document.getElementById('modalEditarAdelanto').style.display = 'flex';
+    document.getElementById('editar_adelanto_monto').focus();
+}
+
+function cerrarModalEditarAdelanto() {
+    document.getElementById('modalEditarAdelanto').style.display = 'none';
+}
+
+// Listener para submit del formulario de editar adelanto
+document.addEventListener('DOMContentLoaded', function() {
+    const formEditarAdelanto = document.getElementById('formEditarAdelanto');
+    
+    if (formEditarAdelanto) {
+        formEditarAdelanto.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const monto = parseFloat(document.getElementById('editar_adelanto_monto').value);
+            
+            if (!monto || monto <= 0) {
+                if (typeof showNotification === 'function') {
+                    showNotification('El monto debe ser mayor a 0', 'error');
+                } else {
+                    alert('El monto debe ser mayor a 0');
+                }
+                return;
+            }
+            
+            if (typeof showLoader === 'function') {
+                showLoader();
+            }
+            
+            const formData = new FormData(formEditarAdelanto);
+            const adelantoId = document.getElementById('editar_adelanto_id').value;
+            
+            fetch(window.PHP_BASE_URL + '/facturas/adelanto/editar/' + adelantoId, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (typeof hideLoader === 'function') {
+                    hideLoader();
+                }
+                
+                if (data.success) {
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'success');
+                    } else {
+                        alert(data.message);
+                    }
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'error');
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                if (typeof hideLoader === 'function') {
+                    hideLoader();
+                }
+                console.error('Error:', error);
+                if (typeof showNotification === 'function') {
+                    showNotification('Error al procesar la solicitud', 'error');
+                } else {
+                    alert('Error al procesar la solicitud');
+                }
+            });
+        });
+    }
+});
+
+// ============================================
+// ELIMINAR ADELANTO
+// ============================================
+
+function eliminarAdelanto(id) {
+    if (!confirm('¿Está seguro de eliminar este adelanto? Esta acción recalculará la deuda total de la factura.')) {
+        return;
+    }
+    
+    if (typeof showLoader === 'function') {
+        showLoader();
+    }
+    
+    const formData = new FormData();
+    formData.append('csrf_token', document.querySelector('input[name="csrf_token"]').value);
+    
+    fetch(window.PHP_BASE_URL + '/facturas/adelanto/eliminar/' + id, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (typeof hideLoader === 'function') {
+            hideLoader();
+        }
+        
+        if (data.success) {
+            if (typeof showNotification === 'function') {
+                showNotification(data.message, 'success');
+            } else {
+                alert(data.message);
+            }
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            if (typeof showNotification === 'function') {
+                showNotification(data.message, 'error');
+            } else {
+                alert(data.message);
+            }
+        }
+    })
+    .catch(error => {
+        if (typeof hideLoader === 'function') {
+            hideLoader();
+        }
+        console.error('Error:', error);
+        if (typeof showNotification === 'function') {
+            showNotification('Error al procesar la solicitud', 'error');
+        } else {
+            alert('Error al procesar la solicitud');
+        }
+    });
 }
 
 function anularFactura(id, codigo) {
@@ -732,5 +967,15 @@ window.addEventListener('click', function(event) {
     const modalCantidad = document.getElementById('modalCantidad');
     if (modalCantidad && event.target === modalCantidad) {
         cerrarModalCantidad();
+    }
+
+    const modalAgregar = document.getElementById('modalAgregarAdelanto');
+    if (modalAgregar && event.target === modalAgregar) {
+        cerrarModalAgregarAdelanto();
+    }
+    
+    const modalEditar = document.getElementById('modalEditarAdelanto');
+    if (modalEditar && event.target === modalEditar) {
+        cerrarModalEditarAdelanto();
     }
 });

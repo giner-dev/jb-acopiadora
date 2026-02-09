@@ -304,6 +304,23 @@
     .facturas .table td:nth-child(7){
         display: none !important; 
     }
+
+    /* TABLA FACTURAS */
+
+    /* Forzamos a que aparezcan las columnas que main.css ocultó */
+    .adelantos .table th:nth-child(3),
+    .adelantos .table td:nth-child(3),
+    .adelantos .table th:nth-child(4),
+    .adelantos .table td:nth-child(4){
+        display: table-cell !important; 
+    }
+
+
+    /* Ocultamos las que realmente queremos ocultar en PRODUCTOS */
+    .adelantos .table th:nth-child(5),
+    .adelantos .table td:nth-child(5){
+        display: none !important; 
+    }
 }
 
 
